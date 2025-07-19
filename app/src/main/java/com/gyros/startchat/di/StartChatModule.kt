@@ -1,0 +1,30 @@
+package com.gyros.startchat.di
+
+import android.content.Context
+import com.gyros.startchat.data.CountryCodesReader
+import com.gyros.startchat.repositories.CountryCodeRepository
+import com.gyros.startchat.repositories.CountryCodeRepositoryImpl
+import com.squareup.moshi.Moshi
+import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
+import dagger.Module
+import dagger.Provides
+import dagger.hilt.InstallIn
+import dagger.hilt.android.qualifiers.ApplicationContext
+import dagger.hilt.components.SingletonComponent
+
+@Module
+@InstallIn(SingletonComponent::class)
+object StartChatModule {
+    @Provides
+    fun provideCountryCodesReader(@ApplicationContext context: Context): CountryCodesReader {
+        return CountryCodesReader(context, "country_codes.json", Moshi.Builder().add(
+            KotlinJsonAdapterFactory()
+        ).build())
+    }
+
+    @Provides
+    fun provideCountryCodeRepository(countryCodeRepository: CountryCodeRepositoryImpl): CountryCodeRepository {
+        return countryCodeRepository
+    }
+
+}

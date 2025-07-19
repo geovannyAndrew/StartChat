@@ -54,6 +54,8 @@ dependencies {
     implementation(libs.androidx.material3)
     implementation(libs.dagger.hilt.android)
     ksp(libs.hilt.android.compiler)
+    //implementation(libs.moshi)
+    implementation(libs.moshi.kotlin)
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
