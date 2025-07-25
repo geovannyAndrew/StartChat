@@ -23,7 +23,7 @@ class CountryCodeRepositoryImpl @Inject constructor(
         return null
     }
 
-    override fun saveDefaultCountryCode(countryCode: CountryCode) {
-        sharedPreferences.saveDefaultCountryCode(countryCode.dialCode)
+    override fun saveDefaultCountryCode(countryCode: CountryCode?) {
+        sharedPreferences.saveDefaultCountryCode(countryCode?.dialCode)
     }
 }

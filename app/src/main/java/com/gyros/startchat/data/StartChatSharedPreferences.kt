@@ -1,9 +1,9 @@
 package com.gyros.startchat.data
 
 import android.content.Context
-import javax.inject.Inject
 import androidx.core.content.edit
 import dagger.hilt.android.qualifiers.ApplicationContext
+import javax.inject.Inject
 
 class StartChatSharedPreferences @Inject constructor(@ApplicationContext context: Context) {
 
@@ -11,7 +11,7 @@ class StartChatSharedPreferences @Inject constructor(@ApplicationContext context
         context.getSharedPreferences(NAME_SHARED_PREFERENCES, Context.MODE_PRIVATE)
 
 
-    fun saveDefaultCountryCode(dialCode: String) {
+    fun saveDefaultCountryCode(dialCode: String?) {
         sharedPreferences.edit {
             putString(DEFAULT_COUNTRY_CODE, dialCode)
         }

@@ -8,6 +8,6 @@ interface CountryCodeRepository {
 
     fun getDefaultCountryCode(): CountryCode?
 
-    fun saveDefaultCountryCode(countryCode: CountryCode)
+    fun saveDefaultCountryCode(countryCode: CountryCode?)
 
 }

@@ -3,13 +3,10 @@ package com.gyros.startchat.screens.startchat
 import android.content.Intent
 import androidx.activity.compose.LocalActivity
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -18,43 +15,53 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.DropdownMenu
-import androidx.compose.material3.DropdownMenuItem
+import androidx.compose.material3.CenterAlignedTopAppBar
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.PlatformTextStyle
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.LocalLifecycleOwner
+import com.gyros.startchat.R
+import com.gyros.startchat.common.composables.DropdownCountries
 import com.gyros.startchat.ui.theme.Green
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun StartChatScreen(
     modifier: Modifier = Modifier,
     state: StartChatViewModel.StartChatState,
-    isDialog: Boolean = false
+    isDialog: Boolean = false,
+    onNavigationIconClick: () -> Unit = {}
 ) {
     if (isDialog) {
         StartChatContent(
@@ -62,7 +69,28 @@ fun StartChatScreen(
             isDialog = true
         )
     } else {
-        Scaffold { innerPadding ->
+        Scaffold(
+            topBar = {
+                CenterAlignedTopAppBar(
+                    colors = TopAppBarDefaults.topAppBarColors(
+                        containerColor = Green,
+                        titleContentColor = Color.White
+                    ),
+                    title = {
+                        Text("Start Chat", maxLines = 1, overflow = TextOverflow.Ellipsis)
+                    },
+                    navigationIcon = {
+                        IconButton(onClick = onNavigationIconClick) {
+                            Icon(
+                                imageVector = Icons.Filled.Menu,
+                                contentDescription = "Open main menu",
+                                tint = Color.White
+                            )
+                        }
+                    }
+                )
+            },
+        ) { innerPadding ->
             StartChatContent(
                 modifier = Modifier.padding(innerPadding),
                 state = state
@@ -75,25 +103,26 @@ fun StartChatScreen(
 @Composable
 fun StartChatScreenPreview() {
     StartChatScreen(
-        state = StartChatViewModel.StartChatState()
+        state = StartChatViewModel.StartChatState(
+            countryCodes = listOf(),
+        )
     )
 }
 
 @Composable
 fun StartChatScreenWithViewModel(
     modifier: Modifier = Modifier,
-    actionText: String? = null
+    actionText: String? = null,
+    onNavigationIconClick: () -> Unit = {}
 ) {
     val lifecycle = LocalLifecycleOwner.current.lifecycle
     val activity = LocalActivity.current
     val viewModel = hiltViewModel<StartChatViewModel>()
-    actionText?.let {
-        viewModel.processText(it)
-    } ?: run {
-        viewModel.loadCountryCodes()
-    }
     val context = LocalContext.current
     LaunchedEffect(viewModel, lifecycle) {
+        viewModel.start(
+            actionText = actionText
+        )
         viewModel.events.collect { event->
             when (event) {
                 is StartChatViewModel.Events.StartIntentAction -> {
@@ -111,7 +140,8 @@ fun StartChatScreenWithViewModel(
     StartChatScreen(
         modifier = modifier,
         state = state,
-        isDialog = actionText != null
+        isDialog = actionText != null,
+        onNavigationIconClick = onNavigationIconClick
     )
 }
 
@@ -131,8 +161,6 @@ private fun StartChatContent(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
-        var expanded by remember { mutableStateOf(false) }
-        var selectedCountryCode by remember { mutableStateOf(state.selectedCountryCode) }
         Card(
             modifier = Modifier.width(332.dp),
             shape = RoundedCornerShape(8.dp),
@@ -143,97 +171,58 @@ private fun StartChatContent(
             Column(
                 modifier = Modifier.padding(horizontal = 16.dp, vertical = 24.dp)
             ) {
+                val alpha = if (state.countryCodes != null) {
+                    1F
+                } else {
+                    0F
+                }
                 Box(
-                    modifier = Modifier.fillMaxWidth()
+                    contentAlignment = Alignment.Center
                 ) {
-                    Row(
-                        modifier = Modifier
-                            .border(1.dp, Color.Gray, shape = RoundedCornerShape(8.dp))
-                            .padding(16.dp)
-                            .fillMaxWidth()
-                            .clickable {
-                                expanded = true
-                            },
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
+                    DropdownCountries(
+                        modifier = Modifier.alpha(alpha),
+                        countryCodeSelected = state.selectedCountryCode,
+                        countryCodes = state.countryCodes,
+                        onCountryCodeSelected = state.onCountryCodeSelected
+                    )
+                    if(state.countryCodes == null) {
                         Text(
-                            text = selectedCountryCode?.let {
-                                "${it.dialCode} ${it.flag}"
-                            } ?: "",
-                            style = TextStyle(
-                                fontSize = 18.sp,
-                                platformStyle = PlatformTextStyle()
-                            )
-                        )
-                        Spacer(
-                            modifier = Modifier.width(8.dp)
-                        )
-                        Text(
-                            text = selectedCountryCode?.name ?: "Select Country Code",
-                            color = Color.Gray,
+                            stringResource(R.string.start_chat_number_with_country_code),
                             style = TextStyle(
                                 fontSize = 18.sp,
                                 platformStyle = PlatformTextStyle(),
-                                fontFamily = FontFamily.Default
+                                fontFamily = FontFamily.Default,
+                                fontWeight = FontWeight.W400
                             ),
-                            modifier = Modifier.weight(1f)
                         )
-                        Text(
-                            text = "▼",
-                        )
-                    }
-                    DropdownMenu(
-                        expanded = expanded,
-                        onDismissRequest = {
-                            expanded = false
-                        }
-                    ) {
-                        state.countryCodes.forEach { countryCode ->
-                            DropdownMenuItem(
-                                text = {
-                                    Text(
-                                        text = "${countryCode.dialCode} ${countryCode.flag} ${countryCode.name}",
-                                        style = TextStyle(
-                                            fontSize = 18.sp,
-                                            platformStyle = PlatformTextStyle(),
-                                            fontFamily = FontFamily.Default
-                                        ),
-                                    )
-                                },
-                                onClick = {
-                                    selectedCountryCode = countryCode
-                                    expanded = false
-                                    state.onCountryCodeSelected(countryCode)
-                                }
-                            )
-                        }
                     }
                 }
                 Spacer(
                     Modifier.height(8.dp)
                 )
-                var textState by remember { mutableStateOf(state.phoneNumber) }
                 OutlinedTextField(
                     singleLine = true,
-                    value = textState,
+                    value = state.phoneNumber,
                     onValueChange = { newText ->
-                        textState = newText                    // 3. Update the state
+                       state.onEditTextChange(newText)
                     },
                     textStyle = TextStyle(
                         fontSize = 18.sp,
                         platformStyle = PlatformTextStyle(),
                         fontFamily = FontFamily.Default
                     ),
-                    placeholder = { Text("Enter phone number") }, // 4. Placeholder as Composable
+                    placeholder = { Text(stringResource(R.string.start_chat_enter_phone_number)) }, // 4. Placeholder as Composable
                     modifier = Modifier.fillMaxWidth(),
                     colors = OutlinedTextFieldDefaults.colors(
                         focusedBorderColor = Color.Gray,
-                        unfocusedBorderColor = Color.Gray
+                        unfocusedBorderColor = Color.Gray,
+                        focusedTextColor = Color.Black,
+                        unfocusedTextColor = Color.Black
                     ),
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Phone)
                 )
                 Spacer(
-                    Modifier.height(8.dp)
+                    Modifier.height(16.dp)
                 )
                 Button(
                     modifier = Modifier.fillMaxWidth(),
@@ -244,13 +233,13 @@ private fun StartChatContent(
                     ),
                     onClick = {
                         state.onStartChat(
-                            selectedCountryCode,
-                            textState
+                            state.selectedCountryCode,
+                            state.phoneNumber
                         )
                     }
                 ) {
                     Text(
-                        text = "Start Chat",
+                        text = stringResource(R.string.start_chat_button_cta),
                         style = TextStyle(
                             fontSize = 18.sp,
                             platformStyle = PlatformTextStyle(),
@@ -260,5 +249,8 @@ private fun StartChatContent(
                 }
             }
         }
+        Spacer(
+            Modifier.height(24.dp)
+        )
     }
 }
