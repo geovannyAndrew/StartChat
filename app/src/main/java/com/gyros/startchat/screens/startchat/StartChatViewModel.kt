@@ -1,11 +1,13 @@
 package com.gyros.startchat.screens.startchat
 
 import android.net.Uri
+import android.util.Log
 import androidx.core.net.toUri
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.gyros.startchat.common.extensions.hasCountryCode
 import com.gyros.startchat.common.extensions.sanitizePhoneNumber
+import com.gyros.startchat.data.ClipBoardManager
 import com.gyros.startchat.data.models.CountryCode
 import com.gyros.startchat.domain.GetCountryCodesUseCase
 import com.gyros.startchat.domain.GetDefaultCountryCodeUseCase
@@ -23,7 +25,8 @@ import javax.inject.Inject
 class StartChatViewModel @Inject constructor(
     private val saveDefaultCountryCodeUseCase: SaveDefaultCountryCodeUseCase,
     private val getCountryCodesUseCase: GetCountryCodesUseCase,
-    private val getDefaultCountryCodeUseCase: GetDefaultCountryCodeUseCase
+    private val getDefaultCountryCodeUseCase: GetDefaultCountryCodeUseCase,
+    private val clipBoardManager: ClipBoardManager
 ) : ViewModel() {
 
     private val _state = MutableStateFlow(StartChatState(
@@ -47,10 +50,12 @@ class StartChatViewModel @Inject constructor(
     }
 
     private fun loadCountryCodes() {
+        val phoneNumberFromClipBoard = clipBoardManager.getPhoneNumbersFromClipBoard().firstOrNull()?.sanitizePhoneNumber() // TODO
         _state.update {
             it.copy(
                 countryCodes = countryCodes,
                 selectedCountryCode = getDefaultCountryCodeUseCase(),
+                phoneNumber = phoneNumberFromClipBoard.orEmpty()
             )
         }
     }
@@ -123,6 +128,16 @@ class StartChatViewModel @Inject constructor(
         }
     }
 
+    fun onResume() {
+        val numbersFromClipBoard = clipBoardManager.getPhoneNumbersFromClipBoard()
+        _state.update {
+            it.copy(
+                numbersOnClipBoard = numbersFromClipBoard
+            )
+        }
+
+    }
+
 
     data class StartChatState(
         val countryCodes: List<CountryCode>? = null,
@@ -131,6 +146,7 @@ class StartChatViewModel @Inject constructor(
         val onStartChat: (CountryCode?, String) -> Unit = { _, _ -> },
         val onCountryCodeSelected: (CountryCode) -> Unit = {},
         val onEditTextChange: (String) -> Unit = {},
+        val numbersOnClipBoard: List<String>? = null
     )
 
     sealed class Events {

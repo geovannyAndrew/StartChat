@@ -1,6 +1,8 @@
 package com.gyros.startchat.di
 
 import android.content.Context
+import com.gyros.startchat.data.ClipBoardManager
+import com.gyros.startchat.data.ClipBoardManagerImpl
 import com.gyros.startchat.data.CountryCodesReader
 import com.gyros.startchat.repositories.CountryCodeRepository
 import com.gyros.startchat.repositories.CountryCodeRepositoryImpl
@@ -25,6 +27,11 @@ object StartChatModule {
     @Provides
     fun provideCountryCodeRepository(countryCodeRepository: CountryCodeRepositoryImpl): CountryCodeRepository {
         return countryCodeRepository
+    }
+
+    @Provides
+    fun provideClipBoardManager(@ApplicationContext context: Context): ClipBoardManager {
+        return ClipBoardManagerImpl(context)
     }
 
 }
