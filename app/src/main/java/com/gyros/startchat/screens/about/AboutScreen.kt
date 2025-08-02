@@ -1,7 +1,6 @@
 package com.gyros.startchat.screens.about
 
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -66,18 +65,13 @@ fun AboutScreen(
             verticalArrangement = Arrangement.Center
         ) {
             Image(
-                modifier = Modifier.widthIn(max = 150.dp),
+                modifier = Modifier.widthIn(max = 200.dp),
                 painter = painterResource(id = R.drawable.ic_launcher_about_icon),
                 colorFilter = ColorFilter.tint(
-                    if (isSystemInDarkTheme()) {
-                        Color.White
-                    } else {
-                        Color.Gray
-                    }
+                    Color.Gray
                 ),
                 contentDescription = "App icon"
             )
-            Spacer(modifier = Modifier.padding(16.dp))
             Text(stringResource(R.string.app_name), style = MaterialTheme.typography.headlineMedium)
             Text(stringResource(R.string.about_developed_by_gyros))
             Spacer(modifier = Modifier.padding(32.dp))

@@ -64,7 +64,7 @@ fun DropdownCountries(
                 modifier = Modifier.width(8.dp)
             )
             Text(
-                text = countryCodeSelected?.name ?: stringResource(R.string.start_chatselect_country_code),
+                text = countryCodeSelected?.name ?: stringResource(R.string.start_chat_select_country_code),
                 color = Color.Gray,
                 style = TextStyle(
                     fontSize = 18.sp,

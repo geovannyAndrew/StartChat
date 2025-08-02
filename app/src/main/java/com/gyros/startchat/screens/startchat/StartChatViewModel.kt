@@ -1,11 +1,11 @@
 package com.gyros.startchat.screens.startchat
 
 import android.net.Uri
-import android.util.Log
 import androidx.core.net.toUri
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.gyros.startchat.common.extensions.hasCountryCode
+import com.gyros.startchat.common.extensions.isValidBasicPhone
 import com.gyros.startchat.common.extensions.sanitizePhoneNumber
 import com.gyros.startchat.data.ClipBoardManager
 import com.gyros.startchat.data.models.CountryCode
@@ -31,7 +31,6 @@ class StartChatViewModel @Inject constructor(
 
     private val _state = MutableStateFlow(StartChatState(
         onEditTextChange = ::cleanText,
-        onStartChat = ::startChat,
         onCountryCodeSelected = ::selectCountryCode
     ))
     val state = _state.asStateFlow()
@@ -50,24 +49,28 @@ class StartChatViewModel @Inject constructor(
     }
 
     private fun loadCountryCodes() {
-        val phoneNumberFromClipBoard = clipBoardManager.getPhoneNumbersFromClipBoard().firstOrNull()?.sanitizePhoneNumber() // TODO
         _state.update {
             it.copy(
                 countryCodes = countryCodes,
-                selectedCountryCode = getDefaultCountryCodeUseCase(),
-                phoneNumber = phoneNumberFromClipBoard.orEmpty()
+                selectedCountryCode = getDefaultCountryCodeUseCase()
             )
         }
     }
 
     private fun cleanText(text: String) {
         val sanitized = text.sanitizePhoneNumber()
+        val onStartChat = if (sanitized.isValidBasicPhone()) {
+            ::startChat
+        } else {
+            null
+        }
         if (sanitized.hasCountryCode()) {
             _state.update {
                 it.copy(
                     countryCodes = null,
                     selectedCountryCode = null,
-                    phoneNumber = sanitized
+                    phoneNumber = sanitized,
+                    onStartChat = onStartChat
                 )
             }
         } else {
@@ -75,7 +78,8 @@ class StartChatViewModel @Inject constructor(
                 it.copy(
                     countryCodes = countryCodes,
                     selectedCountryCode = getDefaultCountryCodeUseCase(),
-                    phoneNumber = sanitized
+                    phoneNumber = sanitized,
+                    onStartChat = onStartChat
                 )
             }
         }
@@ -129,21 +133,21 @@ class StartChatViewModel @Inject constructor(
     }
 
     fun onResume() {
-        val numbersFromClipBoard = clipBoardManager.getPhoneNumbersFromClipBoard()
-        _state.update {
-            it.copy(
-                numbersOnClipBoard = numbersFromClipBoard
-            )
+        viewModelScope.launch {
+            val list = clipBoardManager.getPhoneNumbersFromClipBoard()
+            _state.update {
+                it.copy(
+                    numbersOnClipBoard = list
+                )
+            }
         }
-
     }
-
 
     data class StartChatState(
         val countryCodes: List<CountryCode>? = null,
         val selectedCountryCode: CountryCode? = null,
         val phoneNumber: String = "",
-        val onStartChat: (CountryCode?, String) -> Unit = { _, _ -> },
+        val onStartChat: ((CountryCode?, String) -> Unit)? = null,
         val onCountryCodeSelected: (CountryCode) -> Unit = {},
         val onEditTextChange: (String) -> Unit = {},
         val numbersOnClipBoard: List<String>? = null
