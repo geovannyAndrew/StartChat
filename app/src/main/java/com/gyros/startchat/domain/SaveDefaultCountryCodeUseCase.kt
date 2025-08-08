@@ -5,7 +5,7 @@ import com.gyros.startchat.repositories.CountryCodeRepository
 import javax.inject.Inject
 
 class SaveDefaultCountryCodeUseCase @Inject constructor(
-    val repository: CountryCodeRepository
+    private val repository: CountryCodeRepository
 ) {
     operator fun invoke(countryCode: CountryCode?) {
         repository.saveDefaultCountryCode(countryCode)

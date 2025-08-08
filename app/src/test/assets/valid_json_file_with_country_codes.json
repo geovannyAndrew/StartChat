@@ -1,0 +1,38 @@
+[
+  {
+    "name": "Afghanistan",
+    "dialCode": "+93",
+    "code": "AF",
+    "flag": "🇦🇫"
+  },
+  {
+    "name": "Aland Islands",
+    "dialCode": "+358",
+    "code": "AX",
+    "flag": "🇦🇽"
+  },
+  {
+    "name": "Albania",
+    "dialCode": "+355",
+    "code": "AL",
+    "flag": "🇦🇱"
+  },
+  {
+    "name": "Algeria",
+    "dialCode": "+213",
+    "code": "DZ",
+    "flag": "🇩🇿"
+  },
+  {
+    "name": "AmericanSamoa",
+    "dialCode": "+1684",
+    "code": "AS",
+    "flag": "🇦🇸"
+  },
+  {
+    "name": "Andorra",
+    "dialCode": "+376",
+    "code": "AD",
+    "flag": "🇦🇩"
+  }
+]

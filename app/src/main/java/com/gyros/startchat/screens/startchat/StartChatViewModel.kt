@@ -1,7 +1,6 @@
 package com.gyros.startchat.screens.startchat
 
 import android.net.Uri
-import androidx.core.net.toUri
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.gyros.startchat.common.extensions.hasCountryCode
@@ -11,6 +10,7 @@ import com.gyros.startchat.data.ClipBoardManager
 import com.gyros.startchat.data.models.CountryCode
 import com.gyros.startchat.domain.GetCountryCodesUseCase
 import com.gyros.startchat.domain.GetDefaultCountryCodeUseCase
+import com.gyros.startchat.domain.GetWhatsAppUriUseCase
 import com.gyros.startchat.domain.SaveDefaultCountryCodeUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
@@ -26,6 +26,7 @@ class StartChatViewModel @Inject constructor(
     private val saveDefaultCountryCodeUseCase: SaveDefaultCountryCodeUseCase,
     private val getCountryCodesUseCase: GetCountryCodesUseCase,
     private val getDefaultCountryCodeUseCase: GetDefaultCountryCodeUseCase,
+    private val getWhatsAppUriUseCase: GetWhatsAppUriUseCase,
     private val clipBoardManager: ClipBoardManager
 ) : ViewModel() {
 
@@ -89,7 +90,7 @@ class StartChatViewModel @Inject constructor(
         viewModelScope.launch {
             val cleanedText = actionText.sanitizePhoneNumber()
             if (cleanedText.hasCountryCode()) {
-                val uri = "https://wa.me/${cleanedText.replace("+", "")}".toUri()
+                val uri = getWhatsAppUriUseCase(cleanedText)
                 _events.send(
                     Events.StartIntentAction(
                         uri = uri
@@ -102,6 +103,7 @@ class StartChatViewModel @Inject constructor(
                         countryCodes = countryCodes,
                         selectedCountryCode = selectedCountryCode,
                         phoneNumber = cleanedText,
+                        onStartChat = ::startChat
                     )
                 }
             }
@@ -135,10 +137,12 @@ class StartChatViewModel @Inject constructor(
     fun onResume() {
         viewModelScope.launch {
             val list = clipBoardManager.getPhoneNumbersFromClipBoard()
-            _state.update {
-                it.copy(
-                    numbersOnClipBoard = list
-                )
+            if (!list.firstOrNull().equals(state.value.phoneNumber)) {
+                _state.update {
+                    it.copy(
+                        numbersOnClipBoard = list
+                    )
+                }
             }
         }
     }
