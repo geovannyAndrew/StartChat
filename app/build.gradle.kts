@@ -1,3 +1,5 @@
+import java.text.SimpleDateFormat
+import java.util.Date
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
@@ -28,6 +30,15 @@ android {
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
+            applicationVariants.all {
+                val variant = this
+                variant.outputs
+                    .map { it as com.android.build.gradle.internal.api.BaseVariantOutputImpl }
+                    .forEach { output ->
+                        val outputFileName = "start_chat_${SimpleDateFormat("yyyyMMdd").format(Date())}.apk"
+                        output.outputFileName = outputFileName
+                    }
+            }
         }
     }
     compileOptions {
