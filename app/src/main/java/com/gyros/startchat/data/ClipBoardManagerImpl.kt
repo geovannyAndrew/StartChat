@@ -8,11 +8,7 @@ import javax.inject.Inject
 class ClipBoardManagerImpl @Inject constructor(private val context: Context) : ClipBoardManager {
 
     override fun getPhoneNumbersFromClipBoard(): List<String> {
-        val listPhonesFromClipBoard = context.getFromClipBoard(
-            maxItems = 3,
-            regex = REGEX_VALID_PHONE_NUMBER
-        )
-        return listPhonesFromClipBoard
+        return context.getFromClipBoard(maxItems = 3, regex = REGEX_VALID_PHONE_NUMBER)
     }
 
     companion object {

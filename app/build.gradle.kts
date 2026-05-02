@@ -1,5 +1,5 @@
-import java.text.SimpleDateFormat
-import java.util.Date
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
@@ -31,12 +31,11 @@ android {
                 "proguard-rules.pro"
             )
             applicationVariants.all {
-                val variant = this
-                variant.outputs
+                outputs
                     .map { it as com.android.build.gradle.internal.api.BaseVariantOutputImpl }
                     .forEach { output ->
-                        val outputFileName = "start_chat_${SimpleDateFormat("yyyyMMdd").format(Date())}.apk"
-                        output.outputFileName = outputFileName
+                        val date = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyyMMdd"))
+                        output.outputFileName = "start_chat_$date.apk"
                     }
             }
         }
@@ -71,6 +70,7 @@ dependencies {
 
     testImplementation(libs.junit)
     testImplementation(libs.mockk)
+    testImplementation(libs.kotlinx.coroutines.test)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
     androidTestImplementation(platform(libs.androidx.compose.bom))

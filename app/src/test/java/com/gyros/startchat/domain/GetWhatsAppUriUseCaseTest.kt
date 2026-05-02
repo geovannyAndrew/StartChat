@@ -27,15 +27,17 @@ class GetWhatsAppUriUseCaseTest {
 
     @Test
     fun `invoke should return correct WhatsApp URI`() {
-        // Given
         val phoneNumber = "1234567890"
 
-        // When
         sut.invoke(phoneNumber)
 
-        // Then
-        verify {
-            Uri.parse("https://wa.me/$phoneNumber")
-        }
+        verify { Uri.parse("https://wa.me/$phoneNumber") }
+    }
+
+    @Test
+    fun `invoke strips leading plus sign from phone number`() {
+        sut.invoke("+14155552671")
+
+        verify { Uri.parse("https://wa.me/14155552671") }
     }
 }

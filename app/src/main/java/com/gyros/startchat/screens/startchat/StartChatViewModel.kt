@@ -124,26 +124,17 @@ class StartChatViewModel @Inject constructor(
         phoneNumber: String,
     ) {
         countryCode?.let {
-            processText(
-                actionText = "+${countryCode.dialCode}$phoneNumber"
-            )
+            processText(actionText = "${countryCode.dialCode}$phoneNumber")
         } ?: run {
-            processText(
-                actionText = phoneNumber
-            )
+            processText(actionText = phoneNumber)
         }
     }
 
     fun onResume() {
         viewModelScope.launch {
             val list = clipBoardManager.getPhoneNumbersFromClipBoard()
-            if (!list.firstOrNull().equals(state.value.phoneNumber)) {
-                _state.update {
-                    it.copy(
-                        numbersOnClipBoard = list
-                    )
-                }
-            }
+            val filtered = list.filter { it != state.value.phoneNumber }
+            _state.update { it.copy(numbersOnClipBoard = filtered) }
         }
     }
 
