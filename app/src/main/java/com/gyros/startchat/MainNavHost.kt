@@ -7,6 +7,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.gyros.startchat.screens.about.AboutScreen
+import com.gyros.startchat.screens.history.ChatHistoryScreenWithViewModel
 import com.gyros.startchat.screens.startchat.StartChatScreenWithViewModel
 
 @Composable
@@ -22,6 +23,11 @@ fun MainNavHost(
         builder = {
             composable("start_chat") {
                 StartChatScreenWithViewModel(
+                    onNavigationIconClick = onNavigationIconClick
+                )
+            }
+            composable("history") {
+                ChatHistoryScreenWithViewModel(
                     onNavigationIconClick = onNavigationIconClick
                 )
             }

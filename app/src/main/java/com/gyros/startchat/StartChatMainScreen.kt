@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.History
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Info
 import androidx.compose.material3.DrawerValue
@@ -71,6 +72,18 @@ fun StartChatMainScreen() {
                                     drawerState.close()
                                 }
                                 navController.navigate("start_chat")
+                            }
+                        )
+                        NavigationDrawerItem(
+                            label = { Text(text = stringResource(R.string.drawer_option_history)) },
+                            colors = colors,
+                            selected = false,
+                            icon = { Icon(Icons.Filled.History, contentDescription = null) },
+                            onClick = {
+                                scope.launch {
+                                    drawerState.close()
+                                }
+                                navController.navigate("history")
                             }
                         )
                         NavigationDrawerItem(

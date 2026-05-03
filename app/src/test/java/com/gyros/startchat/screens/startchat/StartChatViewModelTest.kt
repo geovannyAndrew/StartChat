@@ -6,8 +6,10 @@ import com.gyros.startchat.data.models.CountryCode
 import com.gyros.startchat.domain.GetCountryCodesUseCase
 import com.gyros.startchat.domain.GetDefaultCountryCodeUseCase
 import com.gyros.startchat.domain.GetWhatsAppUriUseCase
+import com.gyros.startchat.domain.SaveChatHistoryEntryUseCase
 import com.gyros.startchat.domain.SaveDefaultCountryCodeUseCase
 import com.gyros.startchat.mockCountryCode
+import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.unmockkAll
@@ -37,6 +39,7 @@ class StartChatViewModelTest {
     private val getDefaultCountryCodeUseCase = mockk<GetDefaultCountryCodeUseCase>(relaxed = true)
     private val getWhatsAppUriUseCase = mockk<GetWhatsAppUriUseCase>(relaxed = true)
     private val clipBoardManager = mockk<ClipBoardManager>(relaxed = true)
+    private val saveHistoryEntryUseCase = mockk<SaveChatHistoryEntryUseCase>(relaxed = true)
 
     private lateinit var sut: StartChatViewModel
 
@@ -51,7 +54,8 @@ class StartChatViewModelTest {
             getCountryCodesUseCase,
             getDefaultCountryCodeUseCase,
             getWhatsAppUriUseCase,
-            clipBoardManager
+            clipBoardManager,
+            saveHistoryEntryUseCase
         )
     }
 
@@ -85,6 +89,17 @@ class StartChatViewModelTest {
 
         assert(capturedEvent is StartChatViewModel.Events.StartIntentAction)
         job.cancel()
+    }
+
+    @Test
+    fun `start with actionText that has country code saves history entry`() = runTest {
+        val uri = mockk<Uri>()
+        every { getWhatsAppUriUseCase(any()) } returns uri
+
+        sut.start("+14155552671")
+        advanceUntilIdle()
+
+        coVerify { saveHistoryEntryUseCase("+14155552671") }
     }
 
     @Test

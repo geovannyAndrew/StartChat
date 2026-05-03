@@ -4,6 +4,8 @@ import android.content.Context
 import com.gyros.startchat.data.ClipBoardManager
 import com.gyros.startchat.data.ClipBoardManagerImpl
 import com.gyros.startchat.data.CountryCodesReader
+import com.gyros.startchat.repositories.ChatHistoryRepository
+import com.gyros.startchat.repositories.ChatHistoryRepositoryImpl
 import com.gyros.startchat.repositories.CountryCodeRepository
 import com.gyros.startchat.repositories.CountryCodeRepositoryImpl
 import com.squareup.moshi.Moshi
@@ -33,5 +35,8 @@ object StartChatModule {
     fun provideClipBoardManager(@ApplicationContext context: Context): ClipBoardManager {
         return ClipBoardManagerImpl(context)
     }
+
+    @Provides
+    fun provideChatHistoryRepository(impl: ChatHistoryRepositoryImpl): ChatHistoryRepository = impl
 
 }

@@ -11,6 +11,7 @@ import com.gyros.startchat.data.models.CountryCode
 import com.gyros.startchat.domain.GetCountryCodesUseCase
 import com.gyros.startchat.domain.GetDefaultCountryCodeUseCase
 import com.gyros.startchat.domain.GetWhatsAppUriUseCase
+import com.gyros.startchat.domain.SaveChatHistoryEntryUseCase
 import com.gyros.startchat.domain.SaveDefaultCountryCodeUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
@@ -27,7 +28,8 @@ class StartChatViewModel @Inject constructor(
     private val getCountryCodesUseCase: GetCountryCodesUseCase,
     private val getDefaultCountryCodeUseCase: GetDefaultCountryCodeUseCase,
     private val getWhatsAppUriUseCase: GetWhatsAppUriUseCase,
-    private val clipBoardManager: ClipBoardManager
+    private val clipBoardManager: ClipBoardManager,
+    private val saveHistoryEntryUseCase: SaveChatHistoryEntryUseCase
 ) : ViewModel() {
 
     private val _state = MutableStateFlow(StartChatState(
@@ -91,6 +93,7 @@ class StartChatViewModel @Inject constructor(
             val cleanedText = actionText.sanitizePhoneNumber()
             if (cleanedText.hasCountryCode()) {
                 val uri = getWhatsAppUriUseCase(cleanedText)
+                saveHistoryEntryUseCase(cleanedText)
                 _events.send(
                     Events.StartIntentAction(
                         uri = uri

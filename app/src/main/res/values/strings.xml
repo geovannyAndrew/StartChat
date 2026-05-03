@@ -13,4 +13,7 @@
     <string name="start_chat_select_country_code">Select Country Code</string>
     <string name="start_chat_dropdown_icon">▼</string>
     <string name="start_chat_numbers_from_clipboard">Use Number from Clipboard:</string>
+    <string name="drawer_option_history">History</string>
+    <string name="toolbar_history_title">History</string>
+    <string name="history_empty_state">No chat history yet.</string>
 </resources>
