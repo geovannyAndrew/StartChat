@@ -2,7 +2,9 @@ package com.gyros.startchat.screens.history
 
 import android.content.Intent
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -15,6 +17,7 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
@@ -34,6 +37,9 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.gyros.startchat.R
 import com.gyros.startchat.data.models.ChatHistoryEntry
 import com.gyros.startchat.ui.theme.Green
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -117,17 +123,41 @@ private fun ChatHistoryContent(
     } else {
         LazyColumn(modifier = modifier.fillMaxSize()) {
             items(state.entries) { entry ->
-                Text(
-                    text = entry.phoneNumber,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .clickable { state.onEntryClicked?.invoke(entry) }
-                        .padding(horizontal = 16.dp, vertical = 12.dp)
+                ChatHistoryItem(
+                    entry = entry,
+                    onClick = { state.onEntryClicked?.invoke(entry) }
                 )
                 HorizontalDivider()
             }
         }
     }
+}
+
+@Composable
+private fun ChatHistoryItem(
+    entry: ChatHistoryEntry,
+    onClick: () -> Unit
+) {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .clickable(onClick = onClick)
+            .padding(horizontal = 16.dp, vertical = 12.dp),
+        horizontalArrangement = Arrangement.SpaceBetween,
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Text(text = entry.phoneNumber)
+        Text(
+            text = formatTimestamp(entry.timestamp),
+            style = MaterialTheme.typography.bodySmall,
+            color = Color.Gray
+        )
+    }
+}
+
+private fun formatTimestamp(timestamp: Long): String {
+    val sdf = SimpleDateFormat("MMM d, yyyy\nHH:mm", Locale.getDefault())
+    return sdf.format(Date(timestamp))
 }
 
 @Preview
