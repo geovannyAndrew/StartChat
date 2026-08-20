@@ -18,10 +18,13 @@ on your device — Start Chat extracts the number and opens WhatsApp for you.
   can revisit and re-open past conversations from the History screen.
 - **About screen** — shows the app description and current version.
 
-## Screens & Navigation
-| <img width="1080" height="2424" alt="Screenshot_1787025339" src="https://github.com/user-attachments/assets/b87c4210-71fe-4262-a1c8-8cc72044346a" /> | <img width="1080" height="2424" alt="Screenshot_1787025346" src="https://github.com/user-attachments/assets/67516a99-f765-4a19-a8fb-5bc8356a61cc" /> | <img width="1080" height="2424" alt="Screenshot_1787025377" src="https://github.com/user-attachments/assets/59f10aca-88e3-4395-90c9-2dea55cc9a6b" /> |
-|:---:|:---:|:---:|
+## Gif
+<img width="340" alt="screen_recording" src="https://github.com/user-attachments/assets/cac3c357-5dab-483d-b794-1a66295f4d9c" />
 
+
+## Screens & Navigation
+| <img width="1080" height="2424" alt="Screenshot_1787025339" src="https://github.com/user-attachments/assets/b87c4210-71fe-4262-a1c8-8cc72044346a" /> | <img width="1080" height="2424" alt="Screenshot_20260819_203643" src="https://github.com/user-attachments/assets/a9978d07-aaf9-443a-919a-203188522172" /> | <img width="1080" height="2424" alt="Screenshot_1787025377" src="https://github.com/user-attachments/assets/59f10aca-88e3-4395-90c9-2dea55cc9a6b" /> |
+|:---:|:---:|:---:|
 The app uses a `ModalNavigationDrawer` with a `NavHost` exposing three destinations:
 
 | Route         | Screen               | Description                                              |
