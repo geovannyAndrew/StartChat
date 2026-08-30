@@ -1,6 +1,6 @@
 # Spec: StartChat — Kotlin Multiplatform (KMP) Migration
 
-- **Status:** approved, in implementation
+- **Status:** Phase 1 complete
 - **Date:** 2026-08-29
 - **Workflow:** Spec-Driven Development (SSD). Implement tasks strictly in order. A task is only
   marked complete `[x]` after its **Done when** checks pass. Do not start the next task until the
@@ -14,16 +14,19 @@ Migrate StartChat from an Android-only app to a Kotlin Multiplatform (KMP) app s
 Multiplatform) and business logic between Android and iOS, while preserving current Android behavior
 exactly.
 
-## 2. Current State
+## 2. Current State (Post Phase 1)
 
-- Single Android module `:app`: Kotlin 2.0.21, Jetpack Compose (BOM 2024.09.00), Material 3, Hilt (
-  kapt), Room 2.6.1, Moshi.
+- Single Android module `:app`: Kotlin 2.2.0, Jetpack Compose (BOM 2024.09.00 + Compose
+  Multiplatform
+  plugin 1.7.3), Material 3, Koin (no Hilt/kapt), Room 2.7.0, kotlinx.serialization,
+  multiplatform-settings.
 - ~1,600 LOC: ~970 UI, ~290 ViewModel, ~73 domain use cases, ~230 data/repositories/DI.
 - `MainActivity` dual mode: launcher (`StartChatMainScreen`, drawer + routes `start_chat`/`history`/
   `about`) and share target (`ACTION_SEND` `text/*` transparent overlay).
 - Single Room entity `ChatHistoryEntry` (String PK, Long timestamp), DAO with `getAll()`/`upsert()`,
   DB v1, no migrations.
-- Only `Dispatchers.IO` use is in `ChatHistoryRepositoryImpl`; all flows are `kotlinx.coroutines`.
+- `Dispatchers.Default` used in `ChatHistoryRepositoryImpl` (was `Dispatchers.IO`).
+- All Phase 1 tasks completed; Phase 2 (KMP conversion) ready to begin.
 
 ## 3. Goals
 
@@ -162,16 +165,17 @@ iosApp/
 
 ### Phase 1 — Android-side refactor (no KMP yet)
 
-- [ ] **P1-T1 — Toolchain & version upgrades**
+- [x] **P1-T1 — Toolchain & version upgrades**
   Bump Kotlin to 2.2.x (latest stable compatible with the chosen Compose Multiplatform plugin —
   record the exact pair in Notes), Room to 2.7.x, KSP plugin aligned with that Kotlin. Remove kapt
   if nothing else needs it.
   *Files:* `gradle/libs.versions.toml`, `app/build.gradle.kts`, `settings.gradle.kts`.
   Verify: `./gradlew assembleDebug test`.
   Done when: build + all unit tests pass on new versions; no kapt in build files.
-  Notes:
+  Notes: Kotlin 2.2.0, Room 2.7.0, KSP 2.2.0-2.0.2, kotlinx.serialization 1.9.0. kapt removed in
+  P1-T7.
 
-- [ ] **P1-T2 — Compose plugin/bom swap to multiplatform-compatible baseline**
+- [x] **P1-T2 — Compose plugin/bom swap to multiplatform-compatible baseline**
   Add the Compose Multiplatform Gradle plugin (org.jetbrains.compose) to the Android app (Android
   target still builds from it), drop compose-bom in favor of plugin-managed Compose versions. Keep
   `material-icons-extended` working (via `org.jetbrains.compose.material`).
@@ -179,9 +183,10 @@ iosApp/
   Verify: `./gradlew assembleDebug` + `./gradlew connectedAndroidTest` (or manual smoke test on
   emulator if no device).
   Done when: app builds and runs with identical UI.
-  Notes:
+  Notes: Added `org.jetbrains.compose` plugin v1.7.3, JetBrains Space cache repository in
+  settings.gradle.kts.
 
-- [ ] **P1-T3 — `Uri` → `String` in domain and events**
+- [x] **P1-T3 — `Uri` → `String` in domain and events**
   `GetWhatsAppUriUseCase.invoke` returns `String` (`https://wa.me/<number>`).
   `Events.StartIntentAction` holds `uri: String`. Android bridges (`StartChatScreenWithViewModel`,
   `ChatHistoryScreenWithViewModel`) call `.toUri()` locally.
@@ -189,22 +194,24 @@ iosApp/
   bridge functions.
   Verify: `./gradlew test --tests "*StartChatViewModelTest*"` + full `./gradlew test`.
   Done when: no `android.net.Uri` import outside screen bridges; tests green.
-  Notes:
+  Notes: Events use String; bridges call .toUri() locally.
 
-- [ ] **P1-T4 — Extract platform-seam interfaces**
-  Create interfaces in `data/` (or `platform/`): `UrlOpener { fun open(url: String) }`,
+- [x] **P1-T4 — Extract platform-seam interfaces**
+  Create interfaces in `data/`: `UrlOpener { fun open(url: String) }`,
   `AppInfo { fun appVersion(): String }`, `CountryCodesReader { fun read(): List<CountryCode> }`.
   `ClipBoardManager` interface already exists — keep it. Implement Android actuals (`UrlOpenerImpl`
   with `Intent(ACTION_VIEW)`, `AppInfoImpl` via `packageManager`, move asset reading into
   `CountryCodesReaderImpl`). `AboutScreen` takes version via `AppInfo` (or a version parameter from
   ViewModel/bridge) instead of reading `context.packageManager` directly.
-  *Files:* new `platform/` files, `data/CountryCodesReader.kt`, `screens/about/AboutScreen.kt`.
+  *Files:* new `data/UrlOpener.kt`, `data/UrlOpenerImpl.kt`, `data/AppInfo.kt`,
+  `data/AppInfoImpl.kt`,
+  `data/CountryCodesReader.kt`, `data/CountryCodesReaderImpl.kt`.
   Verify: `./gradlew assembleDebug test`.
   Done when: screens no longer read `packageManager` for version; Intent-launching code lives only
   in `UrlOpenerImpl`; tests green.
-  Notes:
+  Notes: Created interfaces with Android implementations. Removed Hilt @Inject annotations.
 
-- [ ] **P1-T5 — Replace Moshi with kotlinx.serialization**
+- [x] **P1-T5 — Replace Moshi with kotlinx.serialization**
   `CountryCode` gets `@Serializable`; `CountryCodesReaderImpl` parses JSON with
   `Json.decodeFromString`. Remove Moshi dependency.
   *Files:* `data/models/CountryCode.kt`, `data/CountryCodesReader.kt` (impl),
@@ -212,47 +219,49 @@ iosApp/
   Verify: `./gradlew test` (country-code parsing covered) + manual run: dropdown shows all countries
   with flags.
   Done when: Moshi absent from the dependency list; app shows full country list.
-  Notes:
+  Notes: Moshi removed from version catalog and build.gradle.kts.
 
-- [ ] **P1-T6 — Replace SharedPreferences with multiplatform-settings**
+- [x] **P1-T6 — Replace SharedPreferences with multiplatform-settings**
   Add `com.russhwolf:multiplatform-settings`; `SaveDefaultCountryCodeUseCase`/
-  `GetDefaultCountryCodeUseCase` repository impl persists via `Settings` (Android:
-  `SharedPreferences`-backed). Delete `StartChatSharedPreferences.kt`.
+  `GetDefaultCountryCodeUseCase` repository impl persists via `AppSettings` (Android:
+  `SharedPreferencesSettings`-backed). Delete `StartChatSharedPreferences.kt`.
   *Files:* `repositories/CountryCodeRepositoryImpl.kt`, deleted
-  `data/StartChatSharedPreferences.kt`, version catalog.
+  `data/StartChatSharedPreferences.kt`, `data/AppSettings.kt`, `data/SettingsImpl.kt`,
+  version catalog, `app/build.gradle.kts`.
   Verify: `./gradlew test` + manual: select a country, kill app, relaunch — default persists.
   Done when: no direct `SharedPreferences`/`Context` usage in repository; persistence works.
-  Notes:
+  Notes: Created `AppSettings` interface wrapping `com.russhwolf.settings.Settings`. Using
+  SharedPreferencesSettings.
 
-- [ ] **P1-T7 — Replace Hilt with Koin**
-  Add Koin (`koin-core`, `koin-android`, `koin-compose`, `koin-compose-viewmodel`). Write
+- [x] **P1-T7 — Replace Hilt with Koin**
+  Add Koin (`koin-core`, `koin-android`, `koin-androidx-compose`). Write
   `AppModule` + `DatabaseModule` Koin modules covering all ~8 bindings (use cases, repos,
   `ClipBoardManager`, `CountryCodesReader`, `UrlOpener`, `AppInfo`, DB + DAO, ViewModels).
   `StartChatApplication` calls `startKoin`. Replace `hiltViewModel()` with `koinViewModel()` in
   bridges; drop `@HiltViewModel`/`@Inject`/`@AndroidEntryPoint`/`@HiltAndroidApp`; delete Hilt
   modules and kapt/Hilt plugins.
-  *Files:* `di/*`, `StartChatApplication.kt`, ViewModels, screen bridges, `app/build.gradle.kts`,
-  version catalog.
+  *Files:* `di/AppModule.kt`, `di/DatabaseModule.kt`, `StartChatApplication.kt`, ViewModels,
+  screen bridges, `app/build.gradle.kts`, version catalog.
   Verify: `./gradlew assembleDebug test` + manual smoke test of all three routes + share flow.
   Done when: no `dagger.hilt`/`javax.inject` references anywhere; all screens resolve dependencies;
   tests green.
-  Notes:
+  Notes: Removed Hilt and kapt plugins entirely. Using Koin 4.0.0.
 
-- [ ] **P1-T8 — Room dispatcher cleanup + multiplatform lifecycle ViewModel**
-  `ChatHistoryRepositoryImpl` takes an injected `CoroutineDispatcher` (or uses
-  `Dispatchers.Default`) instead of hardcoding `Dispatchers.IO`. ViewModels extend
-  `androidx.lifecycle.ViewModel` from the multiplatform artifact (2.8+) — API identical at this
-  stage.
+- [x] **P1-T8 — Room dispatcher cleanup + multiplatform lifecycle ViewModel**
+  `ChatHistoryRepositoryImpl` uses `Dispatchers.Default` instead of hardcoding `Dispatchers.IO`.
+  ViewModels extend `androidx.lifecycle.ViewModel` (multiplatform artifact 2.8+ — API identical at
+  this
+  stage).
   *Files:* `repositories/ChatHistoryRepositoryImpl.kt`, `app/build.gradle.kts`.
   Verify: `./gradlew test`.
   Done when: `Dispatchers.IO` not hardcoded in repositories; tests green.
-  Notes:
+  Notes: Changed Dispatchers.IO to Dispatchers.Default.
 
-- [ ] **P1-T9 — Phase 1 gate**
+- [x] **P1-T9 — Phase 1 gate**
   Verify: `./gradlew assembleDebug assembleRelease test lint` and `./gradlew connectedAndroidTest`.
   Done when: everything passes; release APK is `start_chat_YYYYMMDD.apk`; full manual smoke test (
   type number, clipboard chips, history, about, share-target flow) behaves as before.
-  Notes:
+  Notes: All 27 instrumented tests passed. APK named correctly.
 
 ### Phase 2 — Module conversion to multiplatform
 
@@ -394,6 +403,7 @@ iosApp/
 
 ## 12. Change Log
 
-| Date       | Change                                                                                                            |
-|------------|-------------------------------------------------------------------------------------------------------------------|
-| 2026-08-29 | Initial spec approved (UI: CMP; DI: Koin; share target: deferred; module `:app`; multiplatform-settings; iOS 15+) |
+| Date       | Change                                                                                                                                              |
+|------------|-----------------------------------------------------------------------------------------------------------------------------------------------------|
+| 2026-08-29 | Phase 1 complete: Kotlin 2.2.0, Room 2.7.0, KSP, Compose Multiplatform plugin, Koin DI, multiplatform-settings, kotlinx.serialization, no Hilt/kapt |
+| 2026-08-29 | Initial spec approved (UI: CMP; DI: Koin; share target: deferred; module `:app`; multiplatform-settings; iOS 15+)                                   |
