@@ -5,17 +5,14 @@ import androidx.lifecycle.viewModelScope
 import com.gyros.startchat.data.models.ChatHistoryEntry
 import com.gyros.startchat.domain.GetChatHistoryUseCase
 import com.gyros.startchat.domain.GetWhatsAppUriUseCase
-import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import javax.inject.Inject
 
-@HiltViewModel
-class ChatHistoryViewModel @Inject constructor(
+class ChatHistoryViewModel(
     private val getChatHistoryUseCase: GetChatHistoryUseCase,
     private val getWhatsAppUriUseCase: GetWhatsAppUriUseCase
 ) : ViewModel() {

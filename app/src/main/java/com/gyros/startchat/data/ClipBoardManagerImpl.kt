@@ -3,9 +3,8 @@ package com.gyros.startchat.data
 import android.content.Context
 import androidx.annotation.VisibleForTesting
 import com.gyros.startchat.common.extensions.getFromClipBoard
-import javax.inject.Inject
 
-class ClipBoardManagerImpl @Inject constructor(private val context: Context) : ClipBoardManager {
+class ClipBoardManagerImpl(private val context: Context) : ClipBoardManager {
 
     override fun getPhoneNumbersFromClipBoard(): List<String> {
         return context.getFromClipBoard(maxItems = 3, regex = REGEX_VALID_PHONE_NUMBER)

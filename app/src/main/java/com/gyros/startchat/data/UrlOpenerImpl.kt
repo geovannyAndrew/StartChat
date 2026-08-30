@@ -3,9 +3,8 @@ package com.gyros.startchat.data
 import android.content.Context
 import android.content.Intent
 import androidx.core.net.toUri
-import javax.inject.Inject
 
-class UrlOpenerImpl @Inject constructor(
+class UrlOpenerImpl(
     private val context: Context
 ) : UrlOpener {
 

@@ -4,17 +4,16 @@ import com.gyros.startchat.data.ChatHistoryDao
 import com.gyros.startchat.data.models.ChatHistoryEntry
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
-import javax.inject.Inject
 
-class ChatHistoryRepositoryImpl @Inject constructor(
+class ChatHistoryRepositoryImpl(
     private val dao: ChatHistoryDao
 ) : ChatHistoryRepository {
 
-    override suspend fun getHistory(): List<ChatHistoryEntry> = withContext(Dispatchers.IO) {
+    override suspend fun getHistory(): List<ChatHistoryEntry> = withContext(Dispatchers.Default) {
         dao.getAll()
     }
 
-    override suspend fun saveEntry(phoneNumber: String) = withContext(Dispatchers.IO) {
+    override suspend fun saveEntry(phoneNumber: String) = withContext(Dispatchers.Default) {
         dao.upsert(ChatHistoryEntry(phoneNumber, System.currentTimeMillis()))
     }
 }

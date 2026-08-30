@@ -3,9 +3,8 @@ package com.gyros.startchat.data
 import android.content.Context
 import com.gyros.startchat.data.models.CountryCode
 import kotlinx.serialization.json.Json
-import javax.inject.Inject
 
-class CountryCodesReaderImpl @Inject constructor(
+class CountryCodesReaderImpl(
     private val context: Context,
     private val assetsPath: String
 ) : CountryCodesReader {

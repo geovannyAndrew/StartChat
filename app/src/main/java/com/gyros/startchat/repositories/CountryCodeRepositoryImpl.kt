@@ -3,9 +3,8 @@ package com.gyros.startchat.repositories
 import com.gyros.startchat.data.CountryCodesReader
 import com.gyros.startchat.data.StartChatSharedPreferences
 import com.gyros.startchat.data.models.CountryCode
-import javax.inject.Inject
 
-class CountryCodeRepositoryImpl @Inject constructor(
+class CountryCodeRepositoryImpl(
     private val reader: CountryCodesReader,
     private val sharedPreferences: StartChatSharedPreferences
 ) : CountryCodeRepository {

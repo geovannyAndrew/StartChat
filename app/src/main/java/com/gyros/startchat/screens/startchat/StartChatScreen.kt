@@ -56,7 +56,6 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.compose.LocalLifecycleOwner
@@ -64,6 +63,7 @@ import com.gyros.startchat.R
 import com.gyros.startchat.common.composables.DropdownCountries
 import com.gyros.startchat.data.UrlOpenerImpl
 import com.gyros.startchat.ui.theme.Green
+import org.koin.androidx.compose.koinViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -127,7 +127,7 @@ fun StartChatScreenWithViewModel(
 ) {
     val lifecycle = LocalLifecycleOwner.current.lifecycle
     val activity = LocalActivity.current
-    val viewModel = hiltViewModel<StartChatViewModel>()
+    val viewModel = koinViewModel<StartChatViewModel>()
     val context = LocalContext.current
     val view = LocalView.current
     val urlOpener = remember { UrlOpenerImpl(context) }

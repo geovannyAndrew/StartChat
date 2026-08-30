@@ -33,11 +33,11 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
 import com.gyros.startchat.R
 import com.gyros.startchat.data.UrlOpenerImpl
 import com.gyros.startchat.data.models.ChatHistoryEntry
 import com.gyros.startchat.ui.theme.Green
+import org.koin.androidx.compose.koinViewModel
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -88,7 +88,7 @@ fun ChatHistoryScreenWithViewModel(
     modifier: Modifier = Modifier,
     onNavigationIconClick: () -> Unit = {}
 ) {
-    val viewModel = hiltViewModel<ChatHistoryViewModel>()
+    val viewModel = koinViewModel<ChatHistoryViewModel>()
     val context = LocalContext.current
     val urlOpener = remember { UrlOpenerImpl(context) }
 

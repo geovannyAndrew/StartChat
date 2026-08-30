@@ -2,9 +2,8 @@ package com.gyros.startchat.domain
 
 import com.gyros.startchat.data.models.CountryCode
 import com.gyros.startchat.repositories.CountryCodeRepository
-import javax.inject.Inject
 
-class GetCountryCodesUseCase @Inject constructor(
+class GetCountryCodesUseCase(
     private val repository: CountryCodeRepository
 ) {
 

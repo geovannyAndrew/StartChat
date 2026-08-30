@@ -12,17 +12,14 @@ import com.gyros.startchat.domain.GetDefaultCountryCodeUseCase
 import com.gyros.startchat.domain.GetWhatsAppUriUseCase
 import com.gyros.startchat.domain.SaveChatHistoryEntryUseCase
 import com.gyros.startchat.domain.SaveDefaultCountryCodeUseCase
-import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import javax.inject.Inject
 
-@HiltViewModel
-class StartChatViewModel @Inject constructor(
+class StartChatViewModel(
     private val saveDefaultCountryCodeUseCase: SaveDefaultCountryCodeUseCase,
     private val getCountryCodesUseCase: GetCountryCodesUseCase,
     private val getDefaultCountryCodeUseCase: GetDefaultCountryCodeUseCase,

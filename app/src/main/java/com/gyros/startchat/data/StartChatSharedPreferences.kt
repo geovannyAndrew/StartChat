@@ -2,10 +2,8 @@ package com.gyros.startchat.data
 
 import android.content.Context
 import androidx.core.content.edit
-import dagger.hilt.android.qualifiers.ApplicationContext
-import javax.inject.Inject
 
-class StartChatSharedPreferences @Inject constructor(@ApplicationContext context: Context) {
+class StartChatSharedPreferences(context: Context) {
 
     private val sharedPreferences =
         context.getSharedPreferences(NAME_SHARED_PREFERENCES, Context.MODE_PRIVATE)
