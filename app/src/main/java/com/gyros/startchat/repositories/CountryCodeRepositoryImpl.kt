@@ -10,7 +10,7 @@ class CountryCodeRepositoryImpl @Inject constructor(
     private val sharedPreferences: StartChatSharedPreferences
 ) : CountryCodeRepository {
 
-    private val listCodes by lazy { reader.getCountryCodes() }
+    private val listCodes by lazy { reader.read() }
 
     override fun getCountryCodes(): List<CountryCode> {
         return listCodes

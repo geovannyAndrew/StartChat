@@ -1,6 +1,5 @@
 package com.gyros.startchat.screens.history
 
-import android.net.Uri
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.gyros.startchat.data.models.ChatHistoryEntry
@@ -45,6 +44,6 @@ class ChatHistoryViewModel @Inject constructor(
     )
 
     sealed class Events {
-        class OpenWhatsApp(val uri: Uri) : Events()
+        class OpenWhatsApp(val uri: String) : Events()
     }
 }

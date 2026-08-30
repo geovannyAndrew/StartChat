@@ -6,7 +6,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.gyros.startchat.screens.about.AboutScreen
+import com.gyros.startchat.screens.about.AboutScreenWithViewModel
 import com.gyros.startchat.screens.history.ChatHistoryScreenWithViewModel
 import com.gyros.startchat.screens.startchat.StartChatScreenWithViewModel
 
@@ -32,7 +32,7 @@ fun MainNavHost(
                 )
             }
             composable("about") {
-                AboutScreen(
+                AboutScreenWithViewModel(
                     onNavigationIconClick = onNavigationIconClick
                 )
             }

@@ -1,15 +1,18 @@
 package com.gyros.startchat.di
 
 import android.content.Context
+import com.gyros.startchat.data.AppInfo
+import com.gyros.startchat.data.AppInfoImpl
 import com.gyros.startchat.data.ClipBoardManager
 import com.gyros.startchat.data.ClipBoardManagerImpl
 import com.gyros.startchat.data.CountryCodesReader
+import com.gyros.startchat.data.CountryCodesReaderImpl
+import com.gyros.startchat.data.UrlOpener
+import com.gyros.startchat.data.UrlOpenerImpl
 import com.gyros.startchat.repositories.ChatHistoryRepository
 import com.gyros.startchat.repositories.ChatHistoryRepositoryImpl
 import com.gyros.startchat.repositories.CountryCodeRepository
 import com.gyros.startchat.repositories.CountryCodeRepositoryImpl
-import com.squareup.moshi.Moshi
-import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -21,9 +24,7 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 object StartChatModule {
     @Provides
     fun provideCountryCodesReader(@ApplicationContext context: Context): CountryCodesReader {
-        return CountryCodesReader(context, "country_codes.json", Moshi.Builder().add(
-            KotlinJsonAdapterFactory()
-        ).build())
+        return CountryCodesReaderImpl(context, "country_codes.json")
     }
 
     @Provides
@@ -39,4 +40,13 @@ object StartChatModule {
     @Provides
     fun provideChatHistoryRepository(impl: ChatHistoryRepositoryImpl): ChatHistoryRepository = impl
 
+    @Provides
+    fun provideUrlOpener(@ApplicationContext context: Context): UrlOpener {
+        return UrlOpenerImpl(context)
+    }
+
+    @Provides
+    fun provideAppInfo(@ApplicationContext context: Context): AppInfo {
+        return AppInfoImpl(context)
+    }
 }

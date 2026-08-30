@@ -1,6 +1,5 @@
 package com.gyros.startchat.screens.startchat
 
-import android.content.Intent
 import androidx.activity.compose.LocalActivity
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -40,6 +39,7 @@ import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
@@ -62,6 +62,7 @@ import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import com.gyros.startchat.R
 import com.gyros.startchat.common.composables.DropdownCountries
+import com.gyros.startchat.data.UrlOpenerImpl
 import com.gyros.startchat.ui.theme.Green
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -129,6 +130,7 @@ fun StartChatScreenWithViewModel(
     val viewModel = hiltViewModel<StartChatViewModel>()
     val context = LocalContext.current
     val view = LocalView.current
+    val urlOpener = remember { UrlOpenerImpl(context) }
     LaunchedEffect(viewModel, lifecycle) {
         viewModel.start(
             actionText = actionText
@@ -136,8 +138,7 @@ fun StartChatScreenWithViewModel(
         viewModel.events.collect { event->
             when (event) {
                 is StartChatViewModel.Events.StartIntentAction -> {
-                    val browserIntent = Intent(Intent.ACTION_VIEW, event.uri)
-                    context.startActivity(browserIntent)
+                    urlOpener.open(event.uri)
                     actionText?.let {
                         activity?.finish()
                     }
@@ -178,11 +179,13 @@ private fun StartChatContent(
 ) {
     Column(
         modifier = modifier
-            .fillMaxSize().apply {
+            .fillMaxSize()
+            .apply {
                 if (!isDialog) {
                     background(Color.LightGray)
                 }
-            }.imePadding(),
+            }
+            .imePadding(),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
@@ -201,7 +204,11 @@ private fun StartChatContent(
                         horizontalAlignment = Alignment.CenterHorizontally,
                         modifier = Modifier
                             .fillMaxWidth()
-                            .border(width = 1.dp, color = Color.Gray, shape = RoundedCornerShape(8.dp)),
+                            .border(
+                                width = 1.dp,
+                                color = Color.Gray,
+                                shape = RoundedCornerShape(8.dp)
+                            ),
                         contentPadding = PaddingValues(vertical = 8.dp)
                     ) {
                         item {

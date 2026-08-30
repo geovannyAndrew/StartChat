@@ -18,12 +18,10 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
@@ -36,6 +34,7 @@ import com.gyros.startchat.ui.theme.Green
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AboutScreen(
+    version: String = "",
     onNavigationIconClick: () -> Unit = {}
 ) {
     Scaffold(
@@ -75,10 +74,6 @@ fun AboutScreen(
                 ),
                 contentDescription = "App icon"
             )
-            val context = LocalContext.current
-            val versionName = remember {
-                context.packageManager.getPackageInfo(context.packageName, 0).versionName
-            }
             Text(stringResource(R.string.app_name), style = MaterialTheme.typography.headlineMedium)
             Text(
                 stringResource(R.string.about_description),
@@ -87,7 +82,7 @@ fun AboutScreen(
                 textAlign = TextAlign.Center
             )
             Text(stringResource(R.string.about_developed_by_gyros))
-            Text(stringResource(R.string.about_version, versionName ?: ""))
+            Text(stringResource(R.string.about_version, version))
             Spacer(modifier = Modifier.padding(32.dp))
         }
     }
@@ -96,5 +91,5 @@ fun AboutScreen(
 @Preview
 @Composable
 fun AboutScreenPreview() {
-    AboutScreen()
+    AboutScreen(version = "1.0.0")
 }

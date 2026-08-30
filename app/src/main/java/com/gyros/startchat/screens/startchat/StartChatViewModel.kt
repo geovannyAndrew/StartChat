@@ -1,6 +1,5 @@
 package com.gyros.startchat.screens.startchat
 
-import android.net.Uri
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.gyros.startchat.common.extensions.hasCountryCode
@@ -153,7 +152,7 @@ class StartChatViewModel @Inject constructor(
 
     sealed class Events {
         class StartIntentAction(
-            val uri: Uri
+            val uri: String
         ) : Events()
     }
 }

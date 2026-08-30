@@ -34,19 +34,19 @@ class CountryCodeRepositoryImplTest {
     @Test
     fun `getCountryCodes returns list from reader`() {
         val expected = listOf(mockCountryCode())
-        every { reader.getCountryCodes() } returns expected
+        every { reader.read() } returns expected
 
         val actual = sut.getCountryCodes()
 
         assertEquals(actual, expected)
-        verify { reader.getCountryCodes() }
+        verify { reader.read() }
     }
 
     @Test
     fun `getDefaultCountryCode returns code from shared preferences`() {
         val expected = "+1"
         val listCountryCodeExpected = listOf(mockCountryCode())
-        every { reader.getCountryCodes() } returns listCountryCodeExpected
+        every { reader.read() } returns listCountryCodeExpected
         every { sharedPreferences.getDefaultCountryCode() } returns expected
 
         val actual = sut.getDefaultCountryCode()
@@ -58,7 +58,7 @@ class CountryCodeRepositoryImplTest {
     @Test
     fun `getDefaultCountryCode returns null from shared preferences`() {
         val listCountryCodeExpected = listOf(mockCountryCode())
-        every { reader.getCountryCodes() } returns listCountryCodeExpected
+        every { reader.read() } returns listCountryCodeExpected
         every { sharedPreferences.getDefaultCountryCode() } returns null
 
         val actual = sut.getDefaultCountryCode()
