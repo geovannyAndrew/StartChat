@@ -1,0 +1,41 @@
+package com.gyros.startchat
+
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
+import com.gyros.startchat.screens.about.AboutScreenWithViewModel
+import com.gyros.startchat.screens.history.ChatHistoryScreenWithViewModel
+import com.gyros.startchat.screens.startchat.StartChatScreenWithKoin
+
+@Composable
+fun MainNavHost(
+    modifier: Modifier = Modifier,
+    navController: NavHostController = rememberNavController(),
+    onNavigationIconClick: () -> Unit = {}
+) {
+    NavHost(
+        modifier = modifier,
+        navController = navController,
+        startDestination = "start_chat",
+        builder = {
+            composable("start_chat") {
+                StartChatScreenWithKoin(
+                    onNavigationIconClick = onNavigationIconClick
+                )
+            }
+            composable("history") {
+                ChatHistoryScreenWithViewModel(
+                    onNavigationIconClick = onNavigationIconClick
+                )
+            }
+            composable("about") {
+                AboutScreenWithViewModel(
+                    onNavigationIconClick = onNavigationIconClick
+                )
+            }
+        }
+    )
+}

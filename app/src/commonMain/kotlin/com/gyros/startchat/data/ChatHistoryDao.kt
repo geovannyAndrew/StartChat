@@ -9,8 +9,8 @@ import com.gyros.startchat.data.models.ChatHistoryEntry
 @Dao
 interface ChatHistoryDao {
     @Query("SELECT * FROM chat_history ORDER BY timestamp DESC LIMIT 50")
-    fun getAll(): List<ChatHistoryEntry>
+    suspend fun getAll(): List<ChatHistoryEntry>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun upsert(entry: ChatHistoryEntry)
+    suspend fun upsert(entry: ChatHistoryEntry)
 }
