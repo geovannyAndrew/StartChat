@@ -5,7 +5,7 @@ import platform.UIKit.UIPasteboard
 class ClipBoardManagerImpl : ClipBoardManager {
 
     override fun getPhoneNumbersFromClipBoard(): List<String> {
-        val text = UIPasteboard.general.string ?: return emptyList()
+        val text = UIPasteboard.generalPasteboard().string ?: return emptyList()
         if (REGEX_VALID_PHONE_NUMBER.matches(text)) {
             return listOf(text)
         }

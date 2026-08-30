@@ -21,7 +21,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.PlatformTextStyle
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.unit.dp
@@ -54,8 +53,7 @@ fun DropdownCountries(
                     "${it.dialCode} ${it.flag}"
                 } ?: "",
                 style = TextStyle(
-                    fontSize = 18.sp,
-                    platformStyle = PlatformTextStyle()
+                    fontSize = 18.sp
                 )
             )
             Spacer(
@@ -66,7 +64,6 @@ fun DropdownCountries(
                 color = Color.Gray,
                 style = TextStyle(
                     fontSize = 18.sp,
-                    platformStyle = PlatformTextStyle(),
                     fontFamily = FontFamily.Default
                 ),
                 modifier = Modifier.weight(1f)
@@ -90,7 +87,6 @@ fun DropdownCountries(
                                 text = countryCode.dialCode,
                                 style = TextStyle(
                                     fontSize = 18.sp,
-                                    platformStyle = PlatformTextStyle(),
                                     fontFamily = FontFamily.Default
                                 ),
                             )
@@ -98,7 +94,6 @@ fun DropdownCountries(
                                 text = "${countryCode.flag} ${countryCode.name}",
                                 style = TextStyle(
                                     fontSize = 18.sp,
-                                    platformStyle = PlatformTextStyle(),
                                     fontFamily = FontFamily.Default
                                 ),
                             )

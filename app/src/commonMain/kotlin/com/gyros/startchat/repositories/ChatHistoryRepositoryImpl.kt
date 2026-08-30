@@ -4,6 +4,7 @@ import com.gyros.startchat.data.ChatHistoryDao
 import com.gyros.startchat.data.models.ChatHistoryEntry
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import kotlinx.datetime.Clock
 
 class ChatHistoryRepositoryImpl(
     private val dao: ChatHistoryDao
@@ -14,6 +15,7 @@ class ChatHistoryRepositoryImpl(
     }
 
     override suspend fun saveEntry(phoneNumber: String) = withContext(Dispatchers.Default) {
-        dao.upsert(ChatHistoryEntry(phoneNumber, System.currentTimeMillis()))
+        val timestamp = Clock.System.now().toEpochMilliseconds()
+        dao.upsert(ChatHistoryEntry(phoneNumber, timestamp))
     }
 }

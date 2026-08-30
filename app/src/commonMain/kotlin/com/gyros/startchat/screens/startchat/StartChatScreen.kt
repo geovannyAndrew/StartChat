@@ -36,7 +36,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.PlatformTextStyle
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
@@ -137,7 +136,6 @@ internal fun StartChatContent(
                                 text = "Use Number from Clipboard:",
                                 style = TextStyle(
                                     fontSize = 18.sp,
-                                    platformStyle = PlatformTextStyle(),
                                     fontFamily = FontFamily.Default,
                                     fontWeight = FontWeight.W800
                                 ),
@@ -153,7 +151,6 @@ internal fun StartChatContent(
                                     item,
                                     style = TextStyle(
                                         fontSize = 16.sp,
-                                        platformStyle = PlatformTextStyle(),
                                         fontFamily = FontFamily.Default,
                                     ),
                                 )
@@ -182,7 +179,6 @@ internal fun StartChatContent(
                             text = "Number with country code:",
                             style = TextStyle(
                                 fontSize = 18.sp,
-                                platformStyle = PlatformTextStyle(),
                                 fontFamily = FontFamily.Default,
                                 fontWeight = FontWeight.W800
                             ),
@@ -200,7 +196,6 @@ internal fun StartChatContent(
                     },
                     textStyle = TextStyle(
                         fontSize = 18.sp,
-                        platformStyle = PlatformTextStyle(),
                         fontFamily = FontFamily.Default
                     ),
                     placeholder = { Text("Enter phone number") },
@@ -235,7 +230,6 @@ internal fun StartChatContent(
                         text = "Start Chat",
                         style = TextStyle(
                             fontSize = 18.sp,
-                            platformStyle = PlatformTextStyle(),
                             fontFamily = FontFamily.Default
                         ),
                     )

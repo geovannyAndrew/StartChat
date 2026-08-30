@@ -1,11 +1,12 @@
 package com.gyros.startchat.data
 
-import platform.UIKit.UIApplication
 import platform.Foundation.NSURL
+import platform.UIKit.UIApplication
 
 class UrlOpenerImpl : UrlOpener {
     override fun open(url: String) {
-        val nsUrl = NSURL(string = url) ?: return
-        UIApplication.shared.openURL(nsUrl)
+        val nsUrl = NSURL(string = url)
+        val app = UIApplication.sharedApplication
+        app.openURL(nsUrl)
     }
 }
