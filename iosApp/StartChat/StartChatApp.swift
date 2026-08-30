@@ -1,4 +1,5 @@
 import SwiftUI
+import StartChat
 
 @main
 struct StartChatApp: App {
@@ -11,10 +12,10 @@ struct StartChatApp: App {
 }
 
 struct MainViewControllerRepresentable: UIViewControllerRepresentable {
-    func makeUIViewController(context: Context) -> MainViewController {
-        return MainViewController()
+    func makeUIViewController(context: Context) -> UIViewController {
+        return MainViewControllerKt.createMainViewController()
     }
 
-    func updateUIViewController(_ uiViewController: MainViewController, context: Context) {
+    func updateUIViewController(_ uiViewController: UIViewController, context: Context) {
     }
 }

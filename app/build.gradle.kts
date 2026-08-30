@@ -50,6 +50,9 @@ kotlin {
     androidTarget()
     iosArm64()
     iosSimulatorArm64()
+
+    iosSimulatorArm64().binaries.framework("StartChat")
+
     sourceSets {
         commonMain {
             dependencies {
