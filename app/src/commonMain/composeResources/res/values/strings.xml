@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Start Chat</string>
+    <string name="drawer_start_chat_menu">Start Chat Menu</string>
+    <string name="drawer_option_start_chat">Start Chat</string>
+    <string name="drawer_option_about">About</string>
+    <string name="toolbar_about_title">About</string>
+    <string name="start_chat_number_with_country_code">Number with country code:</string>
+    <string name="start_chat_button_cta">Start Chat</string>
+    <string name="start_chat_enter_phone_number">Enter phone number</string>
+    <string name="about_developed_by_gyros">Developed by Gyros</string>
+    <string name="about_description">Start a WhatsApp chat with any phone number without saving it as a contact. Enter a number manually or pick one from your clipboard.</string>
+    <string name="about_version">Version %s</string>
+    <string name="start_chat_select_country_code">Select Country Code</string>
+    <string name="start_chat_dropdown_icon">▼</string>
+    <string name="start_chat_numbers_from_clipboard">Use Number from Clipboard:</string>
+    <string name="drawer_option_history">History</string>
+    <string name="toolbar_history_title">History</string>
+    <string name="history_empty_state">No chat history yet.</string>
+</resources>
