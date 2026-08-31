@@ -9,15 +9,43 @@
 /* Begin PBXBuildFile section */
 		7568AC0E2C7D79F0008293F3 /* StartChatApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7568AC0D2C7D79F0008293F3 /* StartChatApp.swift */; };
 		7568AC212C7D79F0008293F3 /* StartChat.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7568AC202C7D79F0008293F3 /* StartChat.framework */; };
+		7568AC222C7D79F0008293F3 /* StartChat.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 7568AC202C7D79F0008293F3 /* StartChat.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
+		7568AC252C7D79F0008293F3 /* country_codes.json in Resources */ = {isa = PBXBuildFile; fileRef = 7568AC242C7D79F0008293F3 /* country_codes.json */; };
 /* End PBXBuildFile section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		7568AC232C7D79F0008293F3 /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				7568AC222C7D79F0008293F3 /* StartChat.framework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		7568AC0A2C7D79F0008293F3 /* StartChatApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = StartChatApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		7568AC0D2C7D79F0008293F3 /* StartChatApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StartChatApp.swift; sourceTree = "<group>"; };
 		7568AC0F2C7D79F0008293F3 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		7568AC112C7D79F0008293F3 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
-		7568AC202C7D79F0008293F3 /* StartChat.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = StartChat.framework; sourceTree = "BUILT_PRODUCTS_DIR"; };
+		7568AC202C7D79F0008293F3 /* StartChat.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = "../app/build/bin/iosSimulatorArm64/StartChatDebugFramework/StartChat.framework"; sourceTree = "SOURCE_ROOT"; };
+		7568AC242C7D79F0008293F3 /* country_codes.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = "Resources/country_codes.json"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
+
+/* Begin PBXResourcesBuildPhase section */
+		7568AC262C7D79F0008293F3 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				7568AC252C7D79F0008293F3 /* country_codes.json in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
 
 /* Begin PBXFrameworksBuildPhase section */
 		7568AC0B2C7D79F0008293F3 /* Frameworks */ = {
@@ -46,6 +74,7 @@
 				7568AC0F2C7D79F0008293F3 /* Info.plist */,
 				7568AC112C7D79F0008293F3 /* Assets.xcassets */,
 				7568AC202C7D79F0008293F3 /* StartChat.framework */,
+				7568AC242C7D79F0008293F3 /* country_codes.json */,
 			);
 			path = StartChat;
 			sourceTree = "<group>";
@@ -59,6 +88,8 @@
 			buildPhases = (
 				7568AC0B2C7D79F0008293F3 /* Frameworks */,
 				7568AC102C7D79F0008293F3 /* Sources */,
+				7568AC262C7D79F0008293F3 /* Resources */,
+				7568AC232C7D79F0008293F3 /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
@@ -77,7 +108,7 @@
 			attributes = {
 				BuildIndependentTargetsInParallel = YES;
 				LastSwiftUpdateCheck = 1500;
-				LastUpgradeCheck = 1500;
+				LastUpgradeCheck = 2660;
 				TargetAttributes = {
 					7568AC092C7D79F0008293F3 = {
 						CreatedOnToolsVersion = 15.0;
@@ -172,6 +203,7 @@
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 			};
@@ -228,13 +260,14 @@
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = iphoneos;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SWIFT_COMPILATION_MODE = wholemodule;
 				SWIFT_OPTIMIZATION_LEVEL = "-O";
 				VALIDATE_PRODUCT = YES;
 			};
 			name = Release;
 		};
-			7568AC152C7D79F0008293F3 /* Debug */ = {
+		7568AC152C7D79F0008293F3 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
@@ -245,7 +278,7 @@
 				ENABLE_PREVIEWS = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
-					"$(SRCROOT)/../app/build/bin/iosSimulatorArm64/debugFramework",
+					"$(SRCROOT)/../app/build/bin/iosSimulatorArm64/StartChat$(CONFIGURATION)Framework",
 				);
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = StartChat/Info.plist;
@@ -277,6 +310,10 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = "";
 				ENABLE_PREVIEWS = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(SRCROOT)/../app/build/bin/iosSimulatorArm64/StartChat$(CONFIGURATION)Framework",
+				);
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = StartChat/Info.plist;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;

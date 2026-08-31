@@ -51,6 +51,8 @@
         <string>wa.me</string>
         <string>whatsapp</string>
     </array>
+    <key>CADisableMinimumFrameDurationOnPhone</key>
+    <true />
     <key>NSURLSchemes</key>
     <array>
         <string>wa.me</string>
