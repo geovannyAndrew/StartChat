@@ -15,7 +15,9 @@ composeBom = "2024.09.00"
 composeMultiplatform = "1.7.3"
 mockk = "1.14.5"
 kotlinxCoroutinesTest = "1.9.0"
-jetbrainsNavigation = "2.8.0-alpha13"
+# alpha13+ is built against CMP 1.8.0 and breaks CMP 1.7.3 on iOS (IrLinkageError:
+# CupertinoScrollDecayAnimationSpec constructor removed from public API in 1.8.0-alpha03)
+jetbrainsNavigation = "2.8.0-alpha12"
 room = "2.7.0"
 sqliteBundled = "2.5.0-beta01"
 kotlinxDateTime = "0.6.1"
