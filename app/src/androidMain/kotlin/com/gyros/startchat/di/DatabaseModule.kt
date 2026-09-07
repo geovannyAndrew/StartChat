@@ -1,6 +1,8 @@
 package com.gyros.startchat.di
 
 import androidx.room.Room
+import com.gyros.startchat.data.AppInfo
+import com.gyros.startchat.data.AppInfoImpl
 import com.gyros.startchat.data.AppSettings
 import com.gyros.startchat.data.ClipBoardManager
 import com.gyros.startchat.data.ClipBoardManagerImpl
@@ -8,6 +10,8 @@ import com.gyros.startchat.data.CountryCodesReader
 import com.gyros.startchat.data.CountryCodesReaderImpl
 import com.gyros.startchat.data.SettingsImpl
 import com.gyros.startchat.data.StartChatDatabase
+import com.gyros.startchat.data.UrlOpener
+import com.gyros.startchat.data.UrlOpenerImpl
 import com.russhwolf.settings.Settings
 import com.russhwolf.settings.SharedPreferencesSettings.Factory
 import org.koin.android.ext.koin.androidContext
@@ -26,4 +30,6 @@ val databaseModule = module {
     }
     single<AppSettings> { SettingsImpl(get()) }
     single<ClipBoardManager> { ClipBoardManagerImpl(androidContext()) }
+    single<UrlOpener> { UrlOpenerImpl(androidContext()) }
+    single<AppInfo> { AppInfoImpl(androidContext()) }
 }

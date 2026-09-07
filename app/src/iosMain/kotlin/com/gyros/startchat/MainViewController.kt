@@ -8,8 +8,6 @@ import platform.UIKit.UIViewController
 fun createMainViewController(): UIViewController {
     initKoin()
     return ComposeUIViewController {
-        MainNavHost(
-            onNavigationIconClick = { }
-        )
+        StartChatMainScreen()
     }
 }

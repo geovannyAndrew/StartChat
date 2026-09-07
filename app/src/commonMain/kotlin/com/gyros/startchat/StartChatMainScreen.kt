@@ -23,9 +23,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
@@ -57,13 +55,13 @@ fun StartChatMainScreen() {
                         )
                         Spacer(Modifier.height(12.dp))
                         Text(
-                            stringResource(R.string.drawer_start_chat_menu),
+                            "Start Chat Menu",
                             modifier = Modifier.padding(16.dp),
                             style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.Bold)
                         )
                         HorizontalDivider()
                         NavigationDrawerItem(
-                            label = { Text(text = stringResource(R.string.drawer_option_start_chat)) },
+                            label = { Text(text = "Start Chat") },
                             selected = false,
                             icon = { Icon(Icons.Filled.Home, contentDescription = null) },
                             colors = colors,
@@ -75,7 +73,7 @@ fun StartChatMainScreen() {
                             }
                         )
                         NavigationDrawerItem(
-                            label = { Text(text = stringResource(R.string.drawer_option_history)) },
+                            label = { Text(text = "History") },
                             colors = colors,
                             selected = false,
                             icon = { Icon(Icons.Filled.History, contentDescription = null) },
@@ -87,7 +85,7 @@ fun StartChatMainScreen() {
                             }
                         )
                         NavigationDrawerItem(
-                            label = { Text(text = stringResource(R.string.drawer_option_about)) },
+                            label = { Text(text = "About") },
                             colors = colors,
                             selected = false,
                             icon = { Icon(Icons.Filled.Info, contentDescription = null) },
@@ -115,13 +113,5 @@ fun StartChatMainScreen() {
                 )
             }
         }
-    }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun StartChatPreview() {
-    StartChatTheme {
-        StartChatMainScreen()
     }
 }

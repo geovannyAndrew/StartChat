@@ -1,47 +1,41 @@
 package com.gyros.startchat
 
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
 import com.gyros.startchat.screens.about.AboutScreenWithViewModel
 import com.gyros.startchat.screens.history.ChatHistoryScreenWithViewModel
-import com.gyros.startchat.screens.startchat.StartChatScreenWithKoin
-
-enum class Screen {
-    START_CHAT, HISTORY, ABOUT
-}
+import com.gyros.startchat.screens.startchat.StartChatScreenWithViewModel
 
 @Composable
 fun MainNavHost(
     modifier: Modifier = Modifier,
+    navController: NavHostController = rememberNavController(),
     onNavigationIconClick: () -> Unit = {}
 ) {
-    var currentScreen by remember { mutableStateOf(Screen.START_CHAT) }
-
-    Box(modifier = modifier.fillMaxSize()) {
-        when (currentScreen) {
-            Screen.START_CHAT -> {
-                StartChatScreenWithKoin(
+    NavHost(
+        modifier = modifier,
+        navController = navController,
+        startDestination = "start_chat",
+        builder = {
+            composable("start_chat") {
+                StartChatScreenWithViewModel(
                     onNavigationIconClick = onNavigationIconClick
                 )
             }
-
-            Screen.HISTORY -> {
+            composable("history") {
                 ChatHistoryScreenWithViewModel(
                     onNavigationIconClick = onNavigationIconClick
                 )
             }
-
-            Screen.ABOUT -> {
+            composable("about") {
                 AboutScreenWithViewModel(
                     onNavigationIconClick = onNavigationIconClick
                 )
             }
         }
-    }
+    )
 }

@@ -68,6 +68,7 @@ kotlin {
                 api(libs.jetbrainsComposeUiGraphics)
                 api(libs.jetbrainsComposeMaterial3)
                 api(libs.jetbrainsComposeMaterialIconsExtended)
+                api(libs.jetbrainsNavigationCompose)
             }
         }
         androidMain {
@@ -82,7 +83,6 @@ kotlin {
                 implementation(libs.koinAndroid)
                 implementation(libs.koinAndroidxCompose)
                 implementation(libs.androidxMaterialIconsExtended)
-                implementation(libs.androidxNavigationCompose)
                 implementation(libs.androidxLifecycleViewmodel)
             }
         }
@@ -101,6 +101,20 @@ dependencies {
     androidTestImplementation(libs.androidxUiTestJunit4)
     debugImplementation(libs.androidxUiTooling)
     debugImplementation(libs.androidxUiTestManifest)
+
+    // Pin versions for Compose artifacts left unversioned after the compose-bom removal (P1-T2);
+    // aligned with the Android Compose version managed by the Compose Multiplatform plugin
+    constraints {
+        androidTestImplementation(libs.androidxUiTestJunit4) {
+            version { strictly("1.8.0-beta01") }
+        }
+        debugImplementation(libs.androidxUiTooling) {
+            version { strictly("1.8.0-beta01") }
+        }
+        debugImplementation(libs.androidxUiTestManifest) {
+            version { strictly("1.8.0-beta01") }
+        }
+    }
 }
 
 room {

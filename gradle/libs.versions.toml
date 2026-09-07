@@ -15,14 +15,14 @@ composeBom = "2024.09.00"
 composeMultiplatform = "1.7.3"
 mockk = "1.14.5"
 kotlinxCoroutinesTest = "1.9.0"
-navigationCompose = "2.5.3"
+jetbrainsNavigation = "2.8.0-alpha13"
 room = "2.7.0"
 sqliteBundled = "2.5.0-beta01"
 kotlinxDateTime = "0.6.1"
 
 [libraries]
 androidxCoreKtx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
-androidxNavigationCompose = { module = "androidx.navigation:navigation-compose", version.ref = "navigationCompose" }
+jetbrainsNavigationCompose = { module = "org.jetbrains.androidx.navigation:navigation-compose", version.ref = "jetbrainsNavigation" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 androidxJunit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
 androidxEspressoCore = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCore" }
