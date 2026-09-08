@@ -30,7 +30,7 @@ No CI, formatter, or typecheck config exists — `lint` is the only static check
 Kotlin Multiplatform with three source sets:
 
 - `commonMain/`: shared UI (Compose Multiplatform), ViewModels, domain use cases, repositories,
-  repository implementations, Room DAO/DB, Koin DI modules (`AppModule`, `ViewModelModule`).
+  repository implementations, Room DAO/DB, Koin DI modules (`AppModule`, `DatabaseModule`).
 - `androidMain/`: Android platform impls (`UrlOpenerImpl`, `AppInfoImpl`, `ClipBoardManagerImpl`,
   `CountryCodesReaderImpl`), `DatabaseModule` (Room builder + Android SQLite driver), Android-only
   `StartChatApplication`, `MainActivity` (launcher + `ACTION_SEND` share target).
@@ -77,5 +77,5 @@ button gets disabled).
 
 `CLAUDE.md` and `README.md` describe the same architecture in more detail, but `CLAUDE.md`
 predates the KMP migration — trust this file and `README.md` over it.
-`docs/kmp-migration-spec.md` records the full Phase 1–3 KMP migration history.
+`docs/kmp-migration-spec.md` records the full Phase 1–4 KMP migration history.
 `docs/shared-navigation-spec.md` records the shared-drawer/NavHost consolidation (Phase SN).

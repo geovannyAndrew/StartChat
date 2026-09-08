@@ -4,6 +4,7 @@ import androidx.room.Room
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.gyros.startchat.data.models.ChatHistoryEntry
+import kotlinx.coroutines.runBlocking
 import org.junit.After
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
@@ -32,12 +33,12 @@ class ChatHistoryDaoTest {
     }
 
     @Test
-    fun getAll_returnsEmptyListInitially() {
+    fun getAll_returnsEmptyListInitially() = runBlocking {
         assertTrue(dao.getAll().isEmpty())
     }
 
     @Test
-    fun upsert_insertsEntryAndGetAllReturnsIt() {
+    fun upsert_insertsEntryAndGetAllReturnsIt() = runBlocking {
         val entry = ChatHistoryEntry("+14155552671", 1000L)
         dao.upsert(entry)
 
@@ -47,7 +48,7 @@ class ChatHistoryDaoTest {
     }
 
     @Test
-    fun upsert_samePhoneNumberUpdatesTimestamp() {
+    fun upsert_samePhoneNumberUpdatesTimestamp() = runBlocking {
         dao.upsert(ChatHistoryEntry("+14155552671", 1000L))
         dao.upsert(ChatHistoryEntry("+14155552671", 2000L))
 
@@ -57,7 +58,7 @@ class ChatHistoryDaoTest {
     }
 
     @Test
-    fun getAll_returnsMostRecentFirst() {
+    fun getAll_returnsMostRecentFirst() = runBlocking {
         dao.upsert(ChatHistoryEntry("+11111111111", 1000L))
         dao.upsert(ChatHistoryEntry("+22222222222", 3000L))
         dao.upsert(ChatHistoryEntry("+33333333333", 2000L))
@@ -69,7 +70,7 @@ class ChatHistoryDaoTest {
     }
 
     @Test
-    fun getAll_capsAtFiftyEntries() {
+    fun getAll_capsAtFiftyEntries() = runBlocking {
         for (i in 1..55) {
             dao.upsert(ChatHistoryEntry("+1000000$i", i.toLong()))
         }
