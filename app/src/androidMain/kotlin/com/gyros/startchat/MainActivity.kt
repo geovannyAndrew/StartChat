@@ -4,7 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import com.gyros.startchat.screens.startchat.StartChatScreenWithViewModel
+import com.gyros.startchat.screens.startchat.StartChatScreenForShare
 
 class MainActivity : ComponentActivity() {
 
@@ -18,7 +18,7 @@ class MainActivity : ComponentActivity() {
         if (action == Intent.ACTION_SEND) {
             text?.let {
                 setContent {
-                    StartChatScreenWithViewModel(
+                    StartChatScreenForShare(
                         actionText = it,
                     )
                 }

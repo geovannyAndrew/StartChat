@@ -2,15 +2,14 @@ package com.gyros.startchat.screens.about
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
-import androidx.compose.ui.platform.LocalContext
-import com.gyros.startchat.data.AppInfoImpl
+import com.gyros.startchat.data.AppInfo
+import org.koin.compose.koinInject
 
 @Composable
 fun AboutScreenWithViewModel(
     onNavigationIconClick: () -> Unit = {}
 ) {
-    val context = LocalContext.current
-    val appInfo = remember { AppInfoImpl(context) }
+    val appInfo = koinInject<AppInfo>()
     val version = remember { appInfo.appVersion() }
 
     AboutScreen(

@@ -1,36 +1,34 @@
-package com.gyros.startchat.screens.startchat
+package com.gyros.startchat.screens.history
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import com.gyros.startchat.data.UrlOpener
-import com.gyros.startchat.data.UrlOpenerImpl
+import org.koin.compose.koinInject
 import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
-fun StartChatScreenWithKoin(
+fun ChatHistoryScreenWithViewModel(
     modifier: Modifier = Modifier,
     onNavigationIconClick: () -> Unit = {}
 ) {
-    val viewModel: StartChatViewModel = koinViewModel()
-    val state by viewModel.state.collectAsState()
-    val urlOpener: UrlOpener = remember { UrlOpenerImpl() }
+    val viewModel = koinViewModel<ChatHistoryViewModel>()
+    val urlOpener = koinInject<UrlOpener>()
 
     LaunchedEffect(viewModel) {
-        viewModel.start(actionText = null)
+        viewModel.load()
         viewModel.events.collect { event ->
             when (event) {
-                is StartChatViewModel.Events.StartIntentAction -> {
+                is ChatHistoryViewModel.Events.OpenWhatsApp ->
                     urlOpener.open(event.uri)
-                }
             }
         }
     }
 
-    StartChatScreen(
+    val state by viewModel.state.collectAsState()
+    ChatHistoryScreen(
         modifier = modifier,
         state = state,
         onNavigationIconClick = onNavigationIconClick
