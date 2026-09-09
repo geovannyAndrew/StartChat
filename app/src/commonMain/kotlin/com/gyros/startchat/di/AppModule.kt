@@ -11,6 +11,7 @@ import com.gyros.startchat.repositories.CountryCodeRepository
 import org.koin.core.module.dsl.factoryOf
 import org.koin.dsl.module
 
+/** Shared Koin module providing repositories and use cases across all platforms. */
 val appModule = module {
     single<CountryCodeRepository> {
         com.gyros.startchat.repositories.CountryCodeRepositoryImpl(

@@ -4,6 +4,7 @@ import com.gyros.startchat.data.AppSettings
 import com.gyros.startchat.data.CountryCodesReader
 import com.gyros.startchat.data.models.CountryCode
 
+/** Reads country codes from [CountryCodesReader] and persists the default via [AppSettings]. */
 class CountryCodeRepositoryImpl(
     private val reader: CountryCodesReader,
     private val settings: AppSettings

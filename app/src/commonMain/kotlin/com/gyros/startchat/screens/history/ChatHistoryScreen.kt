@@ -32,6 +32,7 @@ import kotlinx.datetime.Instant
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
 
+/** Scaffold for the Chat History screen with top bar and entry list. */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ChatHistoryScreen(
@@ -73,6 +74,7 @@ fun ChatHistoryScreen(
     }
 }
 
+/** Displays the list of chat history entries, or an empty-state message if none exist. */
 @Composable
 fun ChatHistoryContent(
     modifier: Modifier = Modifier,

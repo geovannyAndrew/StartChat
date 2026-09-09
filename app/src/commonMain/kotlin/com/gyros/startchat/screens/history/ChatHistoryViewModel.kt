@@ -12,6 +12,7 @@ import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
+/** ViewModel for the Chat History screen. Loads past conversations and reopens them via WhatsApp. */
 class ChatHistoryViewModel(
     private val getChatHistoryUseCase: GetChatHistoryUseCase,
     private val getWhatsAppUriUseCase: GetWhatsAppUriUseCase
@@ -35,11 +36,13 @@ class ChatHistoryViewModel(
         }
     }
 
+    /** UI state for the Chat History screen. */
     data class ChatHistoryState(
         val entries: List<ChatHistoryEntry> = emptyList(),
         val onEntryClicked: ((ChatHistoryEntry) -> Unit)? = null
     )
 
+    /** One-shot side effects emitted by [ChatHistoryViewModel]. */
     sealed class Events {
         class OpenWhatsApp(val uri: String) : Events()
     }

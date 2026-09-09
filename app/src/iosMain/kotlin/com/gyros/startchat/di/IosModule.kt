@@ -25,6 +25,7 @@ import platform.Foundation.NSFileManager
 import platform.Foundation.NSUserDefaults
 import platform.Foundation.NSUserDomainMask
 
+/** iOS-specific Koin module providing Room DB, platform services, and settings. */
 val dataModule = module {
     single {
         val dbFilePath = documentDirectory() + "/startchat.db"
@@ -43,7 +44,7 @@ val dataModule = module {
     single<AppInfo> { AppInfoImpl() }
     single<PendingSharedTextStoreInterface> {
         PendingSharedTextStore(
-            userDefaults = NSUserDefaults(suiteName = PendingSharedTextStoreInterface.APP_GROUP_ID)!!,
+            userDefaults = NSUserDefaults(suiteName = PendingSharedTextStoreInterface.APP_GROUP_ID),
             clock = Clock.System
         )
     }

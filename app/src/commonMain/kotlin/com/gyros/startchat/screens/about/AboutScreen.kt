@@ -27,6 +27,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.gyros.startchat.ui.theme.Green
 
+/** Static About screen showing app icon, description, developer name, and version. */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AboutScreen(

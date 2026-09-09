@@ -5,6 +5,7 @@ import androidx.compose.runtime.remember
 import com.gyros.startchat.data.AppInfo
 import org.koin.compose.koinInject
 
+/** Injects [AppInfo] and passes the version to [AboutScreen]. */
 @Composable
 fun AboutScreenWithViewModel(
     onNavigationIconClick: () -> Unit = {}

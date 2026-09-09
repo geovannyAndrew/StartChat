@@ -6,6 +6,7 @@ import androidx.room.RoomDatabase
 import androidx.room.RoomDatabaseConstructor
 import com.gyros.startchat.data.models.ChatHistoryEntry
 
+/** Room database containing the chat history table. */
 @Database(entities = [ChatHistoryEntry::class], version = 1, exportSchema = true)
 @ConstructedBy(StartChatDatabaseConstructor::class)
 abstract class StartChatDatabase : RoomDatabase() {

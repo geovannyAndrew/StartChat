@@ -48,6 +48,7 @@ import androidx.compose.ui.unit.sp
 import com.gyros.startchat.common.composables.DropdownCountries
 import com.gyros.startchat.ui.theme.Green
 
+/** Scaffold for the Start Chat screen with top bar, or a dialog-style variant for share intents. */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun StartChatScreen(
@@ -92,6 +93,7 @@ fun StartChatScreen(
     }
 }
 
+/** Main content of the Start Chat screen: clipboard suggestions, country dropdown, phone input, and start button. */
 @Composable
 internal fun StartChatContent(
     modifier: Modifier = Modifier,

@@ -20,6 +20,7 @@ import kotlinx.datetime.Clock
 import org.koin.android.ext.koin.androidContext
 import org.koin.dsl.module
 
+/** Android-specific Koin module providing Room DB, platform services, and settings. */
 val databaseModule = module {
     single {
         Room.databaseBuilder(androidContext(), StartChatDatabase::class.java, "start_chat_db")

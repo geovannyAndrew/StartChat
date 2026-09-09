@@ -19,6 +19,10 @@ import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
+/**
+ * ViewModel for the Start Chat screen. Manages phone number input, country code selection,
+ * clipboard scanning, and launching WhatsApp conversations via deep links.
+ */
 class StartChatViewModel(
     private val saveDefaultCountryCodeUseCase: SaveDefaultCountryCodeUseCase,
     private val getCountryCodesUseCase: GetCountryCodesUseCase,
@@ -139,6 +143,7 @@ class StartChatViewModel(
         }
     }
 
+    /** UI state for the Start Chat screen. */
     data class StartChatState(
         val countryCodes: List<CountryCode>? = null,
         val selectedCountryCode: CountryCode? = null,
@@ -149,6 +154,7 @@ class StartChatViewModel(
         val numbersOnClipBoard: List<String>? = null
     )
 
+    /** One-shot side effects emitted by [StartChatViewModel]. */
     sealed class Events {
         class StartIntentAction(
             val uri: String

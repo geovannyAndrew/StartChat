@@ -1,5 +1,6 @@
 package com.gyros.startchat.data
 
+/** Abstraction for reading, writing, and clearing pending shared text from the share extension. */
 interface PendingSharedTextStoreInterface {
     fun read(): PendingSharedText?
     fun write(text: String, timestampEpochMs: Long)

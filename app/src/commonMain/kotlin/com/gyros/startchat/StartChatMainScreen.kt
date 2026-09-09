@@ -41,6 +41,7 @@ import com.gyros.startchat.ui.theme.StartChatTheme
 import kotlinx.coroutines.launch
 import org.koin.compose.koinInject
 
+/** Root composable with drawer navigation and [MainNavHost]. Handles shared text from the foreground. */
 @Composable
 fun StartChatMainScreen(actionText: String? = null) {
     val navController: NavHostController = rememberNavController()

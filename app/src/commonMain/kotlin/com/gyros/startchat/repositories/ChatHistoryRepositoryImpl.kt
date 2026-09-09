@@ -6,6 +6,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import kotlinx.datetime.Clock
 
+/** Delegates chat history persistence to the Room [ChatHistoryDao]. */
 class ChatHistoryRepositoryImpl(
     private val dao: ChatHistoryDao
 ) : ChatHistoryRepository {

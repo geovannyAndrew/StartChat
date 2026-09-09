@@ -9,6 +9,7 @@ import com.gyros.startchat.data.UrlOpener
 import org.koin.compose.koinInject
 import org.koin.compose.viewmodel.koinViewModel
 
+/** Bridges [ChatHistoryViewModel] to [ChatHistoryScreen]; handles WhatsApp open events. */
 @Composable
 fun ChatHistoryScreenWithViewModel(
     modifier: Modifier = Modifier,

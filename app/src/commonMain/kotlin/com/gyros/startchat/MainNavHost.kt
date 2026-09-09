@@ -10,6 +10,7 @@ import com.gyros.startchat.screens.about.AboutScreenWithViewModel
 import com.gyros.startchat.screens.history.ChatHistoryScreenWithViewModel
 import com.gyros.startchat.screens.startchat.StartChatScreenWithViewModel
 
+/** Navigation host routing to Start Chat, History, and About screens. */
 @Composable
 fun MainNavHost(
     modifier: Modifier = Modifier,

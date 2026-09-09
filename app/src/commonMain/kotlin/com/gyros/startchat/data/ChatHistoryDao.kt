@@ -6,6 +6,7 @@ import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import com.gyros.startchat.data.models.ChatHistoryEntry
 
+/** Room DAO for querying and persisting chat history entries. */
 @Dao
 interface ChatHistoryDao {
     @Query("SELECT * FROM chat_history ORDER BY timestamp DESC LIMIT 50")
