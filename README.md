@@ -12,6 +12,9 @@ on your device — Start Chat extracts the number and opens WhatsApp for you.
   numbers and surfaces them as quick-pick suggestions.
 - **Share-target integration** — share any text (e.g. from a messaging app, browser, or notes app)
   to Start Chat and it opens directly as a transparent overlay, ready to send to WhatsApp.
+- **iOS Share Extension** — share text from any app via the iOS share sheet into Start Chat on iOS.
+  Uses App Group handoff (`group.com.gyros.startchat`) with 10-minute TTL. SwiftUI-only extension
+  (no Kotlin/Compose in appex). See `docs/ios-share-extension-spec.md`.
 - **Country code picker** — searchable dropdown of country dial codes loaded from a bundled JSON
   asset; your last selection is remembered between sessions.
 - **Chat history** — every chat you start is saved locally (Room database) with a timestamp, so you
@@ -156,6 +159,10 @@ app/src/iosMain/kotlin/com/gyros/startchat/
 ./gradlew :app:linkDebugFrameworkIosSimulatorArm64
 xcodebuild -project iosApp/StartChat.xcodeproj -scheme StartChat \
   -configuration Debug -destination 'platform=iOS Simulator,name=iPhone 15' build
+
+# iOS Share Extension (requires Kotlin framework built first)
+xcodebuild -project iosApp/StartChat.xcodeproj -scheme ShareExtension \
+  -configuration Debug -destination 'platform=iOS Simulator,name=iPhone 15' build
 ```
 
 ### Release build (Android)
@@ -173,6 +180,8 @@ xcodebuild -project iosApp/StartChat.xcodeproj -scheme StartChat \
 - **Instrumented/UI tests** (`app/src/androidTest/`) — Compose `createComposeRule()`. Screens are
   tested in isolation by passing a `State` object directly (no ViewModel or Koin required), plus
   Room DAO tests run against an in-memory database.
+- **iOS unit tests** (`app/src/iosTest/`) — `kotlin.test` framework with `FakeClock` and
+  `FakePendingSharedTextStore` test doubles. Run via `./gradlew :app:iosSimulatorArm64Test`.
 
 ```bash
 # Run all unit tests
@@ -189,6 +198,9 @@ xcodebuild -project iosApp/StartChat.xcodeproj -scheme StartChat \
 
 # Lint
 ./gradlew lint
+
+# iOS unit tests
+./gradlew :app:iosSimulatorArm64Test
 ```
 
 ## Dependency injection

@@ -17,6 +17,8 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
@@ -43,7 +45,6 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.gyros.startchat.common.MenuIcon
 import com.gyros.startchat.common.composables.DropdownCountries
 import com.gyros.startchat.ui.theme.Green
 
@@ -74,7 +75,7 @@ fun StartChatScreen(
                     navigationIcon = {
                         IconButton(onClick = onNavigationIconClick) {
                             Icon(
-                                imageVector = MenuIcon,
+                                imageVector = Icons.Filled.Menu,
                                 contentDescription = "Open main menu",
                                 tint = Color.White
                             )

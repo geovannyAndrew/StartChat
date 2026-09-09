@@ -21,6 +21,10 @@ phone numbers via `wa.me` deep links. iOS target via `iosSimulatorArm64`.
 # iOS simulator build (requires Kotlin framework built first)
 xcodebuild -project iosApp/StartChat.xcodeproj -scheme StartChat \
   -configuration Debug -destination 'platform=iOS Simulator,name=iPhone 15' build
+
+# iOS Share Extension build
+xcodebuild -project iosApp/StartChat.xcodeproj -scheme ShareExtension \
+  -configuration Debug -destination 'platform=iOS Simulator,name=iPhone 15' build
 ```
 
 No CI, formatter, or typecheck config exists — `lint` is the only static check.
@@ -36,7 +40,8 @@ Kotlin Multiplatform with three source sets:
   `StartChatApplication`, `MainActivity` (launcher + `ACTION_SEND` share target).
 - `iosMain/`: iOS platform impls (`UrlOpenerImpl`, `AppInfoImpl`, `ClipBoardManagerImpl`,
   `CountryCodesReaderImpl`), `IosModule` (Room builder + `BundledSQLiteDriver`,
-  `NSUserDefaultsSettings`).
+  `NSUserDefaultsSettings`), `PendingSharedTextStore` (App Group UserDefaults for share extension
+  handoff).
 
 DI wiring per platform via Koin modules. `commonMain` uses `koinViewModel()` and `koinInject<T>()`.
 Platform services (`UrlOpener`, `AppInfo`, `ClipBoardManager`, `CountryCodesReader`, `Settings`)
@@ -63,6 +68,10 @@ button gets disabled).
   (`linkDebugFrameworkIosSimulatorArm64`); the Kotlin framework path is
   `app/build/bin/iosSimulatorArm64/debugFramework/StartChat.framework`.
 - The iOS simulator lacks WhatsApp; `wa.me` URL opens the App Store fallback.
+- iOS Share Extension uses App Group `group.com.gyros.startchat` for handoff. Keys:
+  `pendingSharedText` (String) and `pendingSharedTimestamp` (epoch ms Long). Entries expire after
+  10 minutes. Extension is SwiftUI-only (no Kotlin/Compose in appex). See
+  `docs/ios-share-extension-spec.md`.
 
 ## Testing
 
@@ -72,6 +81,9 @@ button gets disabled).
   by passing a `State` object directly, no ViewModel/DI. Room DAO tests use in-memory DB.
 - Shared mock helpers in `app/src/test/java/com/gyros/startchat/StartChatMocks.kt` are unit-test
   only, not visible to `androidTest`. JSON fixtures live in `app/src/test/assets/`.
+- iOS unit tests (`app/src/iosTest/`): `kotlin.test` framework, `FakeClock`/
+  `FakePendingSharedTextStore`
+  test doubles. Run via `./gradlew :app:iosSimulatorArm64Test`.
 
 ## Other instruction files
 

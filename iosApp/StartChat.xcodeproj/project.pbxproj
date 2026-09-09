@@ -11,6 +11,9 @@
 		7568AC212C7D79F0008293F3 /* StartChat.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7568AC202C7D79F0008293F3 /* StartChat.framework */; };
 		7568AC222C7D79F0008293F3 /* StartChat.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 7568AC202C7D79F0008293F3 /* StartChat.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		7568AC252C7D79F0008293F3 /* country_codes.json in Resources */ = {isa = PBXBuildFile; fileRef = 7568AC242C7D79F0008293F3 /* country_codes.json */; };
+		AA000001AAAA000000000001 /* ShareViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA000002AAAA000000000001 /* ShareViewController.swift */; };
+		AA000001AAAA000000000002 /* ShareView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA000002AAAA000000000002 /* ShareView.swift */; };
+		AA000001AAAA000000000003 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F11441835916E615895EC64F /* Foundation.framework */; };
 		BDD1DEF085EFD55EFF5D5EB1 /* StartChatUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFADAC66739EB6F6921CC641 /* StartChatUITests.swift */; };
 		FAFFA879871356EC23FA95C7 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F11441835916E615895EC64F /* Foundation.framework */; };
 /* End PBXBuildFile section */
@@ -22,6 +25,13 @@
 			proxyType = 1;
 			remoteGlobalIDString = 7568AC092C7D79F0008293F3;
 			remoteInfo = StartChatApp;
+		};
+		AA000003AAAA000000000001 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 7568AC062C7D79F0008293F3 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = AA000004AAAA000000000001;
+			remoteInfo = ShareExtension;
 		};
 /* End PBXContainerItemProxy section */
 
@@ -37,6 +47,17 @@
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		AA000005AAAA000000000001 /* Embed Foundation Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "$(EXTENSIONS_FOLDER_PATH)";
+			dstSubfolderSpec = 13;
+			files = (
+				AA000006AAAA000000000001 /* ShareExtension.appex in Embed Foundation Extensions */,
+			);
+			name = "Embed Foundation Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
@@ -46,6 +67,12 @@
 		7568AC112C7D79F0008293F3 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		7568AC202C7D79F0008293F3 /* StartChat.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = ../app/build/bin/iosSimulatorArm64/StartChatDebugFramework/StartChat.framework; sourceTree = SOURCE_ROOT; };
 		7568AC242C7D79F0008293F3 /* country_codes.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = Resources/country_codes.json; sourceTree = "<group>"; };
+		AA000002AAAA000000000001 /* ShareViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareViewController.swift; sourceTree = "<group>"; };
+		AA000002AAAA000000000002 /* ShareView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareView.swift; sourceTree = "<group>"; };
+		AA000002AAAA000000000003 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		AA000002AAAA000000000004 /* ShareExtension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = ShareExtension.entitlements; sourceTree = "<group>"; };
+		AA000002AAAA000000000005 /* ShareExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = ShareExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		AA000002AAAA000000000006 /* StartChat.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = StartChat.entitlements; sourceTree = "<group>"; };
 		A86816C96A1E7BD88AFEAB6B /* StartChatUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = StartChatUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		BFADAC66739EB6F6921CC641 /* StartChatUITests.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = StartChatUITests.swift; sourceTree = "<group>"; };
 		F11441835916E615895EC64F /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS18.0.sdk/System/Library/Frameworks/Foundation.framework; sourceTree = DEVELOPER_DIR; };
@@ -68,6 +95,14 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		AA00000AAAAA000000000001 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				AA000001AAAA000000000003 /* Foundation.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
@@ -75,6 +110,7 @@
 			isa = PBXGroup;
 			children = (
 				7568AC0C2C7D79F0008293F3 /* StartChat */,
+				AA000007AAAA000000000001 /* ShareExtension */,
 				7568AC302C7D79F0008293F3 /* Products */,
 				99BDB6E54F71BF2A8F9750E8 /* Frameworks */,
 				CD2D250B21AD4B05C2053256 /* StartChatUITests */,
@@ -89,6 +125,7 @@
 				7568AC112C7D79F0008293F3 /* Assets.xcassets */,
 				7568AC202C7D79F0008293F3 /* StartChat.framework */,
 				7568AC242C7D79F0008293F3 /* country_codes.json */,
+				AA000002AAAA000000000006 /* StartChat.entitlements */,
 			);
 			path = StartChat;
 			sourceTree = "<group>";
@@ -97,9 +134,21 @@
 			isa = PBXGroup;
 			children = (
 				7568AC0A2C7D79F0008293F3 /* StartChatApp.app */,
+				AA000002AAAA000000000005 /* ShareExtension.appex */,
 				A86816C96A1E7BD88AFEAB6B /* StartChatUITests.xctest */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		AA000007AAAA000000000001 /* ShareExtension */ = {
+			isa = PBXGroup;
+			children = (
+				AA000002AAAA000000000001 /* ShareViewController.swift */,
+				AA000002AAAA000000000002 /* ShareView.swift */,
+				AA000002AAAA000000000003 /* Info.plist */,
+				AA000002AAAA000000000004 /* ShareExtension.entitlements */,
+			);
+			path = ShareExtension;
 			sourceTree = "<group>";
 		};
 		99BDB6E54F71BF2A8F9750E8 /* Frameworks */ = {
@@ -138,15 +187,34 @@
 				7568AC102C7D79F0008293F3 /* Sources */,
 				7568AC262C7D79F0008293F3 /* Resources */,
 				7568AC232C7D79F0008293F3 /* Embed Frameworks */,
+				AA000005AAAA000000000001 /* Embed Foundation Extensions */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				AA000008AAAA000000000001 /* PBXTargetDependency */,
 			);
 			name = StartChatApp;
 			productName = StartChatApp;
 			productReference = 7568AC0A2C7D79F0008293F3 /* StartChatApp.app */;
 			productType = "com.apple.product-type.application";
+		};
+		AA000004AAAA000000000001 /* ShareExtension */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = AA000009AAAA000000000001 /* Build configuration list for PBXNativeTarget "ShareExtension" */;
+			buildPhases = (
+				AA00000AAAAA000000000001 /* Frameworks */,
+				AA00000BAAAA000000000001 /* Sources */,
+				AA00000CAAAAA000000000001 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = ShareExtension;
+			productName = ShareExtension;
+			productReference = AA000002AAAA000000000005 /* ShareExtension.appex */;
+			productType = "com.apple.product-type.app-extension";
 		};
 		EBD6BA60FAA6737D43C35F63 /* StartChatUITests */ = {
 			isa = PBXNativeTarget;
@@ -179,6 +247,9 @@
 					7568AC092C7D79F0008293F3 = {
 						CreatedOnToolsVersion = 15.0;
 					};
+					AA000004AAAA000000000001 = {
+						CreatedOnToolsVersion = 15.0;
+					};
 				};
 			};
 			buildConfigurationList = 7568AC072C7D79F0008293F3 /* Build configuration list for PBXProject "StartChat" */;
@@ -195,6 +266,7 @@
 			projectRoot = "";
 			targets = (
 				7568AC092C7D79F0008293F3 /* StartChatApp */,
+				AA000004AAAA000000000001 /* ShareExtension */,
 				EBD6BA60FAA6737D43C35F63 /* StartChatUITests */,
 			);
 		};
@@ -216,6 +288,13 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		AA00000CAAAAA000000000001 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
@@ -224,6 +303,15 @@
 			buildActionMask = 2147483647;
 			files = (
 				7568AC0E2C7D79F0008293F3 /* StartChatApp.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		AA00000BAAAA000000000001 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				AA000001AAAA000000000001 /* ShareViewController.swift in Sources */,
+				AA000001AAAA000000000002 /* ShareView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -238,6 +326,12 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
+		AA000008AAAA000000000001 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = ShareExtension;
+			target = AA000004AAAA000000000001 /* ShareExtension */;
+			targetProxy = AA000003AAAA000000000001 /* PBXContainerItemProxy */;
+		};
 		B1540B30EACFA2D314F0FB22 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			name = StartChatApp;
@@ -394,6 +488,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = StartChat/StartChat.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = "";
@@ -428,6 +523,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = StartChat/StartChat.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = "";
@@ -452,6 +548,44 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.gyros.startchat;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		AA00000DAAAA000000000001 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = ShareExtension/ShareExtension.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = "";
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = ShareExtension/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.gyros.startchat.share;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		AA00000EAAAA000000000001 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = ShareExtension/ShareExtension.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = "";
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = ShareExtension/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.gyros.startchat.share;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -493,6 +627,15 @@
 			buildConfigurations = (
 				7568AC152C7D79F0008293F3 /* Debug */,
 				7568AC162C7D79F0008293F3 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		AA000009AAAA000000000001 /* Build configuration list for PBXNativeTarget "ShareExtension" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				AA00000DAAAA000000000001 /* Debug */,
+				AA00000EAAAA000000000001 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

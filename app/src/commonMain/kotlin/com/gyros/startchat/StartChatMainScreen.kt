@@ -20,20 +20,48 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleEventObserver
+import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
+import com.gyros.startchat.data.PendingSharedTextStoreInterface
 import com.gyros.startchat.ui.theme.GreenMenu
 import com.gyros.startchat.ui.theme.StartChatTheme
 import kotlinx.coroutines.launch
+import org.koin.compose.koinInject
 
 @Composable
-fun StartChatMainScreen() {
+fun StartChatMainScreen(actionText: String? = null) {
     val navController: NavHostController = rememberNavController()
+    val pendingStore = koinInject<PendingSharedTextStoreInterface>()
+    val lifecycle = LocalLifecycleOwner.current.lifecycle
+    var foregroundActionText by remember { mutableStateOf<String?>(null) }
+
+    DisposableEffect(lifecycle) {
+        val observer = LifecycleEventObserver { _, event ->
+            if (event == Lifecycle.Event.ON_RESUME) {
+                foregroundActionText = pendingStore.takeIfFresh()?.text
+            }
+        }
+        lifecycle.addObserver(observer)
+        onDispose {
+            lifecycle.removeObserver(observer)
+        }
+    }
+
+    val effectiveActionText = foregroundActionText ?: actionText
+
     StartChatTheme {
         // A surface container using the 'background' color from the theme
         Surface(
@@ -101,6 +129,7 @@ fun StartChatMainScreen() {
             ) {
                 MainNavHost(
                     navController = navController,
+                    actionText = effectiveActionText,
                     onNavigationIconClick = {
                         scope.launch {
                             if (drawerState.isOpen) {
