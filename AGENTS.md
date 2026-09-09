@@ -18,13 +18,18 @@ phone numbers via `wa.me` deep links. iOS target via `iosSimulatorArm64`.
 ./gradlew :app:compileKotlinIosSimulatorArm64
 ./gradlew :app:linkDebugFrameworkIosSimulatorArm64
 
-# iOS simulator build (requires Kotlin framework built first)
+# iOS simulator build (requires Kotlin framework built first; CODE_SIGNING_ALLOWED=NO
+# because no development team is configured — simulator builds don't need signing.
+# Include OS= in the destination to disambiguate duplicated simulators — check available
+# ones with `xcrun simctl list devices available`)
 xcodebuild -project iosApp/StartChat.xcodeproj -scheme StartChat \
-  -configuration Debug -destination 'platform=iOS Simulator,name=iPhone 15' build
+  -configuration Debug -destination 'platform=iOS Simulator,name=iPhone 15,OS=17.5' \
+  CODE_SIGNING_ALLOWED=NO build
 
 # iOS Share Extension build
 xcodebuild -project iosApp/StartChat.xcodeproj -scheme ShareExtension \
-  -configuration Debug -destination 'platform=iOS Simulator,name=iPhone 15' build
+  -configuration Debug -destination 'platform=iOS Simulator,name=iPhone 15,OS=17.5' \
+  CODE_SIGNING_ALLOWED=NO build
 ```
 
 No CI, formatter, or typecheck config exists — `lint` is the only static check.

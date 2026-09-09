@@ -1,11 +1,10 @@
 package com.gyros.startchat.screens.about
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.material.icons.Icons
@@ -22,6 +21,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -62,14 +62,14 @@ fun AboutScreen(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center
         ) {
-            Box(
-                modifier = Modifier
-                    .widthIn(max = 200.dp)
-                    .height(100.dp),
-                contentAlignment = Alignment.Center
-            ) {
-                Text("[App Icon]", style = MaterialTheme.typography.headlineMedium)
-            }
+            Image(
+                modifier = Modifier.widthIn(max = 200.dp),
+                painter = aboutIconPainter(),
+                colorFilter = ColorFilter.tint(
+                    Color.Gray
+                ),
+                contentDescription = "App icon"
+            )
             Text("Start Chat", style = MaterialTheme.typography.headlineMedium)
             Text(
                 "Start a WhatsApp chat with any phone number without saving it as a contact. Enter a number manually or pick one from your clipboard.",

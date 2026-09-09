@@ -155,14 +155,18 @@ app/src/iosMain/kotlin/com/gyros/startchat/
 # Install on a connected device/emulator
 ./gradlew installDebug
 
-# iOS simulator (requires Kotlin framework built first)
+# iOS simulator (requires Kotlin framework built first; CODE_SIGNING_ALLOWED=NO because
+# no development team is configured — simulator builds don't need signing. OS= disambiguates
+# duplicated simulators; check with `xcrun simctl list devices available`)
 ./gradlew :app:linkDebugFrameworkIosSimulatorArm64
 xcodebuild -project iosApp/StartChat.xcodeproj -scheme StartChat \
-  -configuration Debug -destination 'platform=iOS Simulator,name=iPhone 15' build
+  -configuration Debug -destination 'platform=iOS Simulator,name=iPhone 15,OS=17.5' \
+  CODE_SIGNING_ALLOWED=NO build
 
 # iOS Share Extension (requires Kotlin framework built first)
 xcodebuild -project iosApp/StartChat.xcodeproj -scheme ShareExtension \
-  -configuration Debug -destination 'platform=iOS Simulator,name=iPhone 15' build
+  -configuration Debug -destination 'platform=iOS Simulator,name=iPhone 15,OS=17.5' \
+  CODE_SIGNING_ALLOWED=NO build
 ```
 
 ### Release build (Android)
