@@ -9,6 +9,8 @@ import com.gyros.startchat.data.ClipBoardManager
 import com.gyros.startchat.data.ClipBoardManagerImpl
 import com.gyros.startchat.data.CountryCodesReader
 import com.gyros.startchat.data.CountryCodesReaderImpl
+import com.gyros.startchat.data.PendingSharedTextStore
+import com.gyros.startchat.data.PendingSharedTextStoreInterface
 import com.gyros.startchat.data.SettingsImpl
 import com.gyros.startchat.data.StartChatDatabase
 import com.gyros.startchat.data.UrlOpener
@@ -16,6 +18,7 @@ import com.gyros.startchat.data.UrlOpenerImpl
 import com.russhwolf.settings.NSUserDefaultsSettings
 import com.russhwolf.settings.Settings
 import kotlinx.cinterop.ExperimentalForeignApi
+import kotlinx.datetime.Clock
 import org.koin.dsl.module
 import platform.Foundation.NSDocumentDirectory
 import platform.Foundation.NSFileManager
@@ -38,6 +41,12 @@ val dataModule = module {
     single<ClipBoardManager> { ClipBoardManagerImpl() }
     single<UrlOpener> { UrlOpenerImpl() }
     single<AppInfo> { AppInfoImpl() }
+    single<PendingSharedTextStoreInterface> {
+        PendingSharedTextStore(
+            userDefaults = NSUserDefaults(suiteName = PendingSharedTextStoreInterface.APP_GROUP_ID)!!,
+            clock = Clock.System
+        )
+    }
 }
 
 @OptIn(ExperimentalForeignApi::class)

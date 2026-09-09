@@ -14,6 +14,7 @@ import com.gyros.startchat.screens.startchat.StartChatScreenWithViewModel
 fun MainNavHost(
     modifier: Modifier = Modifier,
     navController: NavHostController = rememberNavController(),
+    actionText: String? = null,
     onNavigationIconClick: () -> Unit = {}
 ) {
     NavHost(
@@ -23,6 +24,7 @@ fun MainNavHost(
         builder = {
             composable("start_chat") {
                 StartChatScreenWithViewModel(
+                    actionText = actionText,
                     onNavigationIconClick = onNavigationIconClick
                 )
             }

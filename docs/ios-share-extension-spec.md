@@ -1,6 +1,6 @@
 # Spec: StartChat — iOS Share Extension (ACTION_SEND parity)
 
-- **Status:** approved, pending implementation
+- **Status:** implemented
 - **Date:** 2026-08-29
 - **Prerequisite:** `docs/kmp-migration-spec.md` must be **Status: implemented** (its non-goal "iOS
   Share Extension" is covered by this spec).
