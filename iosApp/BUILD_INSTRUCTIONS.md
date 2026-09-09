@@ -40,9 +40,18 @@ Or from command line:
 xcodebuild -project iosApp/StartChat.xcodeproj \
   -scheme StartChat \
   -configuration Debug \
-  -destination 'platform=iOS Simulator,name=iPhone 15' \
+  -destination 'platform=iOS Simulator,name=iPhone 15,OS=17.5' \
+  CODE_SIGNING_ALLOWED=NO \
   build
 ```
+
+> `CODE_SIGNING_ALLOWED=NO` skips code signing, which is not enforced on the simulator.
+> The project has no development team configured; Xcode's GUI "Run" will complain about
+> signing for the ShareExtension target — build from the command line instead, or add a
+> Personal Team in Xcode → Settings → Accounts and select it for both targets.
+> If you get "Unable to find a device matching the provided destination specifier", your
+> simulator list has duplicates — find one with `xcrun simctl list devices available` and
+> disambiguate with `OS=` or use its `id=`.
 
 ### 4. Running the App
 
