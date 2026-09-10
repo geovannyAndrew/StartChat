@@ -1,13 +1,10 @@
 package com.gyros.startchat.data
 
 import android.content.Context
-import com.squareup.moshi.JsonDataException
-import com.squareup.moshi.JsonEncodingException
-import com.squareup.moshi.Moshi
-import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import io.mockk.every
 import io.mockk.mockk
 import junit.framework.TestCase.assertEquals
+import kotlinx.serialization.SerializationException
 import org.junit.Assert.assertThrows
 import org.junit.Assert.assertTrue
 import org.junit.Before
@@ -20,83 +17,80 @@ class CountryCodesReaderTest {
 
     private val context = mockk<Context>(relaxed = true)
     private val assetsPath = "country_codes.json"
-    private val moshi = Moshi.Builder().add(
-        KotlinJsonAdapterFactory()
-    ).build()
 
     private lateinit var sut: CountryCodesReader
 
     @Before
     fun setUp() {
         every { context.assets.open(assetsPath) } returns mockk(relaxed = true)
-        sut = CountryCodesReader(context, assetsPath, moshi)
+        sut = CountryCodesReaderImpl(context, assetsPath)
     }
 
     @Test
-    fun `getCountryCodes with valid JSON file`() {
+    fun `read with valid JSON file`() {
         val inputStreamFile = getInputStreamFromFileName("valid_json_file_with_country_codes.json")
         every { context.assets.open(assetsPath) } returns inputStreamFile
 
-        val countryCodes = sut.getCountryCodes()
+        val countryCodes = sut.read()
 
         assertTrue(countryCodes.isNotEmpty())
     }
 
     @Test
-    fun `getCountryCodes with empty JSON array`() {
+    fun `read with empty JSON array`() {
         val inputStreamFile = getInputStreamFromFileName("empty_array_json_file.json")
         every { context.assets.open(assetsPath) } returns inputStreamFile
 
-        val countryCodes = sut.getCountryCodes()
+        val countryCodes = sut.read()
 
         assertTrue(countryCodes.isEmpty())
     }
 
     @Test
-    fun `getCountryCodes with malformed JSON`() {
+    fun `read with malformed JSON`() {
         val inputStreamFile = getInputStreamFromFileName("malformed_json_file_with_country_codes.json")
         every { context.assets.open(assetsPath) } returns inputStreamFile
 
-        assertThrows(JsonEncodingException::class.java) {
-            sut.getCountryCodes()
+        assertThrows(SerializationException::class.java) {
+            sut.read()
         }
     }
 
     @Test
-    fun `getCountryCodes with missing asset file`() {
+    fun `read with missing asset file`() {
         every { context.assets.open(assetsPath) } throws FileNotFoundException()
 
         assertThrows(FileNotFoundException::class.java) {
-            sut.getCountryCodes()
+            sut.read()
         }
     }
 
     @Test
-    fun `getCountryCodes with incorrect JSON structure`() {
+    fun `read with incorrect JSON structure`() {
         val inputStreamFile = getInputStreamFromFileName("valid_json_file_with_wrong_format_country_codes.json")
         every { context.assets.open(assetsPath) } returns inputStreamFile
 
-        assertThrows(JsonDataException::class.java) {
-            sut.getCountryCodes()
+        assertThrows(SerializationException::class.java) {
+            sut.read()
         }
     }
 
     @Test
-    fun `getCountryCodes with JSON containing null values for CountryCode fields`() {
+    fun `read with JSON containing null values for CountryCode fields`() {
         val inputStreamFile = getInputStreamFromFileName("valid_json_file_with_null_country_codes.json")
         every { context.assets.open(assetsPath) } returns inputStreamFile
 
-        assertThrows(JsonDataException::class.java) {
-            sut.getCountryCodes()
+        assertThrows(SerializationException::class.java) {
+            sut.read()
         }
     }
 
     @Test
-    fun `getCountryCodes with JSON containing extra unexpected fields in CountryCode objects`() {
+    fun `read with JSON containing extra unexpected fields in CountryCode objects`() {
         val inputStreamFile = getInputStreamFromFileName("valid_json_file_with_extra_data_country_codes.json")
         every { context.assets.open(assetsPath) } returns inputStreamFile
 
-        val countryCodes = sut.getCountryCodes()
+        val countryCodes = sut.read()
 
         assertEquals(1, countryCodes.size)
     }

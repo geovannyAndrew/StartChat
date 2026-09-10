@@ -9,3 +9,12 @@
 .cxx
 local.properties
 .kotlin/
+
+# Xcode
+*.xcodeproj/project.xcworkspace/xcuserdata/
+*.xcodeproj/xcuserdata/
+*.xcworkspace/xcuserdata/
+iosApp/build/
+
+# Claude
+.claude/settings.local.json

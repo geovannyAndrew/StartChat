@@ -1,0 +1,17 @@
+package com.gyros.startchat.data
+
+import androidx.room.Dao
+import androidx.room.Insert
+import androidx.room.OnConflictStrategy
+import androidx.room.Query
+import com.gyros.startchat.data.models.ChatHistoryEntry
+
+/** Room DAO for querying and persisting chat history entries. */
+@Dao
+interface ChatHistoryDao {
+    @Query("SELECT * FROM chat_history ORDER BY timestamp DESC LIMIT 50")
+    suspend fun getAll(): List<ChatHistoryEntry>
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun upsert(entry: ChatHistoryEntry)
+}

@@ -1,6 +1,5 @@
 package com.gyros.startchat.screens.history
 
-import android.net.Uri
 import com.gyros.startchat.data.models.ChatHistoryEntry
 import com.gyros.startchat.domain.GetChatHistoryUseCase
 import com.gyros.startchat.domain.GetWhatsAppUriUseCase
@@ -78,7 +77,7 @@ class ChatHistoryViewModelTest {
     @Test
     fun `onEntryClicked calls getWhatsAppUriUseCase with entry phoneNumber`() = runTest {
         val entry = ChatHistoryEntry("+14155552671", 1000L)
-        val uri = mockk<Uri>()
+        val uri = "https://wa.me/14155552671"
         every { getWhatsAppUriUseCase(any()) } returns uri
 
         sut.state.value.onEntryClicked?.invoke(entry)
@@ -90,7 +89,7 @@ class ChatHistoryViewModelTest {
     @Test
     fun `onEntryClicked emits OpenWhatsApp event with correct uri`() = runTest {
         val entry = ChatHistoryEntry("+14155552671", 1000L)
-        val uri = mockk<Uri>()
+        val uri = "https://wa.me/14155552671"
         every { getWhatsAppUriUseCase(any()) } returns uri
 
         var capturedEvent: ChatHistoryViewModel.Events? = null

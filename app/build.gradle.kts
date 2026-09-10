@@ -1,12 +1,12 @@
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 plugins {
-    alias(libs.plugins.android.application)
-    alias(libs.plugins.kotlin.android)
-    alias(libs.plugins.kotlin.compose)
-    id("org.jetbrains.kotlin.kapt")
-    id("com.google.dagger.hilt.android")
+    alias(libs.plugins.androidApplication)
+    alias(libs.plugins.kotlinMultiplatform)
+    alias(libs.plugins.kotlinCompose)
+    alias(libs.plugins.kotlinSerialization)
     id("com.google.devtools.ksp")
+    id("androidx.room")
 }
 
 android {
@@ -41,45 +41,82 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_11
-        targetCompatibility = JavaVersion.VERSION_11
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
     }
-    kotlinOptions {
-        jvmTarget = "11"
-    }
-    buildFeatures {
-        compose = true
+}
+
+kotlin {
+    androidTarget()
+    iosArm64()
+    iosSimulatorArm64()
+
+    iosSimulatorArm64().binaries.framework("StartChat")
+
+    sourceSets {
+        commonMain {
+            dependencies {
+                api(libs.kotlinxSerializationJson)
+                api(libs.kotlinxDatetime)
+                api(libs.multiplatformSettings)
+                api(libs.androidxRoomRuntime)
+                api(libs.sqliteBundled)
+                api(libs.koinCore)
+                api(libs.koinCompose)
+                api(libs.koinComposeViewmodel)
+                api(libs.jetbrainsComposeUi)
+                api(libs.jetbrainsComposeUiGraphics)
+                api(libs.jetbrainsComposeMaterial3)
+                api(libs.jetbrainsComposeMaterialIconsExtended)
+                api(libs.jetbrainsNavigationCompose)
+            }
+        }
+        androidMain {
+            dependencies {
+                implementation(libs.androidxCoreKtx)
+                implementation(libs.androidxLifecycleRuntimeKtx)
+                implementation(libs.androidxActivityCompose)
+                implementation(libs.androidxUi)
+                implementation(libs.androidxUiGraphics)
+                implementation(libs.androidxUiToolingPreview)
+                implementation(libs.androidxMaterial3)
+                implementation(libs.koinAndroid)
+                implementation(libs.koinAndroidxCompose)
+                implementation(libs.androidxMaterialIconsExtended)
+                implementation(libs.androidxLifecycleViewmodel)
+            }
+        }
     }
 }
 
 dependencies {
-
-    implementation(libs.androidx.core.ktx)
-    implementation(libs.androidx.lifecycle.runtime.ktx)
-    implementation(libs.androidx.activity.compose)
-    implementation(platform(libs.androidx.compose.bom))
-    implementation(libs.androidx.ui)
-    implementation(libs.androidx.ui.graphics)
-    implementation(libs.androidx.ui.tooling.preview)
-    implementation(libs.androidx.material3)
-    implementation(libs.dagger.hilt.android)
-    ksp(libs.hilt.android.compiler)
-    implementation(libs.moshi.kotlin)
-    implementation(libs.androidx.navigation.compose)
-    implementation(libs.androidx.hilt.navigation.compose)
-    implementation(libs.androidx.room.runtime)
-    implementation(libs.androidx.room.ktx)
-    ksp(libs.androidx.room.compiler)
-    implementation(libs.androidx.material.icons.extended)
+    ksp(libs.androidxRoomCompiler)
 
     testImplementation(libs.junit)
     testImplementation(libs.mockk)
-    testImplementation(libs.kotlinx.coroutines.test)
-    androidTestImplementation(libs.androidx.room.testing)
-    androidTestImplementation(libs.androidx.junit)
-    androidTestImplementation(libs.androidx.espresso.core)
-    androidTestImplementation(platform(libs.androidx.compose.bom))
-    androidTestImplementation(libs.androidx.ui.test.junit4)
-    debugImplementation(libs.androidx.ui.tooling)
-    debugImplementation(libs.androidx.ui.test.manifest)
+    testImplementation(libs.kotlinxCoroutinesTest)
+    androidTestImplementation(libs.androidxRoomTesting)
+    androidTestImplementation(libs.androidxJunit)
+    androidTestImplementation(libs.androidxEspressoCore)
+    androidTestImplementation(libs.androidxUiTestJunit4)
+    debugImplementation(libs.androidxUiTooling)
+    debugImplementation(libs.androidxUiTestManifest)
+
+    // Pin versions for Compose artifacts left unversioned after the compose-bom removal (P1-T2);
+    // aligned with the Android Compose version managed by the Compose Multiplatform plugin
+    constraints {
+        androidTestImplementation(libs.androidxUiTestJunit4) {
+            version { strictly("1.8.0-beta01") }
+        }
+        debugImplementation(libs.androidxUiTooling) {
+            version { strictly("1.8.0-beta01") }
+        }
+        debugImplementation(libs.androidxUiTestManifest) {
+            version { strictly("1.8.0-beta01") }
+        }
+    }
+}
+
+room {
+    schemaDirectory("$projectDir/schemas")
 }

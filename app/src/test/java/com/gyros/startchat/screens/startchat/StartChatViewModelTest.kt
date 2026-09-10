@@ -1,6 +1,5 @@
 package com.gyros.startchat.screens.startchat
 
-import android.net.Uri
 import com.gyros.startchat.data.ClipBoardManager
 import com.gyros.startchat.data.models.CountryCode
 import com.gyros.startchat.domain.GetCountryCodesUseCase
@@ -78,7 +77,7 @@ class StartChatViewModelTest {
 
     @Test
     fun `start with actionText that has country code emits StartIntentAction`() = runTest {
-        val uri = mockk<Uri>()
+        val uri = "https://wa.me/14155552671"
         every { getWhatsAppUriUseCase(any()) } returns uri
 
         var capturedEvent: StartChatViewModel.Events? = null
@@ -93,7 +92,7 @@ class StartChatViewModelTest {
 
     @Test
     fun `start with actionText that has country code saves history entry`() = runTest {
-        val uri = mockk<Uri>()
+        val uri = "https://wa.me/14155552671"
         every { getWhatsAppUriUseCase(any()) } returns uri
 
         sut.start("+14155552671")

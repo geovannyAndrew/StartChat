@@ -12,6 +12,9 @@ on your device — Start Chat extracts the number and opens WhatsApp for you.
   numbers and surfaces them as quick-pick suggestions.
 - **Share-target integration** — share any text (e.g. from a messaging app, browser, or notes app)
   to Start Chat and it opens directly as a transparent overlay, ready to send to WhatsApp.
+- **iOS Share Extension** — share text from any app via the iOS share sheet into Start Chat on iOS.
+  Uses App Group handoff (`group.com.gyros.startchat`) with 10-minute TTL. SwiftUI-only extension
+  (no Kotlin/Compose in appex). See `docs/ios-share-extension-spec.md`.
 - **Country code picker** — searchable dropdown of country dial codes loaded from a bundled JSON
   asset; your last selection is remembered between sessions.
 - **Chat history** — every chat you start is saved locally (Room database) with a timestamp, so you
@@ -42,15 +45,15 @@ The app uses a `ModalNavigationDrawer` with a `NavHost` exposing three destinati
 
 ## Architecture
 
-The app follows a layered architecture with [Hilt](https://dagger.dev/hilt/) for dependency
+The app follows a layered architecture with [Koin](https://insert-koin.io/) for dependency
 injection:
 
 ```
-UI (Compose screens)
+UI (Compose Multiplatform screens)
     └── ViewModel (StateFlow + Channel events)
         └── Use Cases (domain layer)
             └── Repository (interface)
-                └── Data sources (Room DAO, CountryCodesReader, SharedPreferences, ClipBoardManager)
+                └── Data sources (Room DAO, CountryCodesReader, Settings, ClipBoardManager)
 ```
 
 ### State pattern
@@ -62,11 +65,11 @@ as launching WhatsApp) are delivered through a `Channel<Events>` collected by th
 
 ### Country codes
 
-Country codes are parsed once at startup from `assets/country_codes.json` using
-[Moshi](https://github.com/square/moshi), cached lazily in both `CountryCodeRepositoryImpl` and
-`StartChatViewModel`. The chosen dial code (e.g. `"+57"`) is persisted via
-`StartChatSharedPreferences`. `CountryCode.dialCode` always includes the `+` prefix — it is not
-added again when building the WhatsApp URI.
+Country codes are parsed once at startup from `composeResources/country_codes.json` using
+[kotlinx.serialization](https://kotlinlang.org/docs/serialization.html), cached lazily in both
+`CountryCodeRepositoryImpl` and `StartChatViewModel`. The chosen dial code (e.g. `"+57"`) is
+persisted via `multiplatform-settings`. `CountryCode.dialCode` always includes the `+` prefix — it
+is not added again when building the WhatsApp URI.
 
 ### Clipboard integration
 
@@ -88,57 +91,85 @@ Each chat that's started is persisted to a Room database (`StartChatDatabase` /
 
 ## Project structure
 
+Kotlin Multiplatform with three source sets:
+
 ```
-app/src/main/java/com/gyros/startchat/
-├── MainActivity.kt                 # Entry point, handles launcher & share-target intents
-├── MainNavHost.kt                  # NavHost wiring start_chat / history / about routes
-├── StartChatMainScreen.kt          # Drawer + nav host scaffold
-├── StartChatApplication.kt         # Hilt application class
-├── di/                             # Hilt modules (StartChatModule, DatabaseModule)
-├── data/                           # Data sources: Room DB/DAO, SharedPreferences,
-│                                   #   ClipBoardManager, CountryCodesReader, models
-├── repositories/                   # Repository interfaces + implementations
-├── domain/                         # Use cases (one class per use case)
+app/src/commonMain/kotlin/com/gyros/startchat/
 ├── screens/
 │   ├── startchat/                  # StartChatScreen + StartChatViewModel + state
 │   ├── history/                    # ChatHistoryScreen + ChatHistoryViewModel
 │   └── about/                      # AboutScreen
-├── common/
-│   ├── composables/                # Shared composables (e.g. DropdownCountries)
-│   └── extensions/                 # Kotlin extensions (String, Context)
-└── ui/theme/                       # Compose Material3 theme (Color, Theme, Type)
+├── navigation/                     # MainNavHost (multiplatform navigation-compose)
+├── common/composables/              # Shared composables (e.g. DropdownCountries)
+├── common/extensions/               # Kotlin extensions (String)
+├── ui/theme/                        # Compose Material3 theme (Color, Theme, Type)
+├── domain/                          # Use cases (one class per use case)
+├── repositories/                    # Repository interfaces + implementations
+├── data/
+│   ├── models/                      # CountryCode, ChatHistoryEntry (Room @Entity)
+│   ├── ChatHistoryDao.kt, StartChatDatabase.kt
+│   └── (interfaces) ClipBoardManager, CountryCodesReader, UrlOpener, AppInfo
+└── di/                              # Koin modules (AppModule, DatabaseModule)
+
+app/src/androidMain/kotlin/com/gyros/startchat/
+├── MainActivity.kt                  # Entry point, handles launcher & share-target intents
+├── StartChatApplication.kt         # Koin application (startKoin)
+└── platform/                        # Android implementations:
+                                     #   UrlOpener (Intent), ClipBoardManager (ClipboardManager),
+                                     #   CountryCodesReader (assets), AppInfo (packageManager)
+
+app/src/iosMain/kotlin/com/gyros/startchat/
+└── platform/                        # iOS implementations:
+                                      #   UrlOpener (UIApplication.openURL),
+                                      #   ClipBoardManager (UIPasteboard),
+                                      #   CountryCodesReader (bundle),
+                                      #   AppInfo (Info.plist)
 ```
 
 ## Tech stack
 
-- **Language**: Kotlin (2.0)
-- **UI**: Jetpack Compose + Material 3
-- **DI**: Hilt (`ViewModelComponent` scope)
+- **Language**: Kotlin 2.2.0
+- **UI**: Compose Multiplatform 1.7.3 (Material 3)
+- **DI**: Koin (`koin-core`, `koin-compose`, `koin-compose-viewmodel`)
 - **Async**: Kotlin Coroutines + `StateFlow` / `Channel`
-- **Persistence**: Room (chat history), `SharedPreferences` (last-used country code)
-- **Navigation**: Jetpack Navigation Compose
-- **JSON parsing**: Moshi (country codes asset)
-- **Min SDK**: 24 · **Target/Compile SDK**: 36
+- **Persistence**: Room 2.7.0 (chat history), `multiplatform-settings` (last-used country code)
+- **Navigation**: navigation-compose (multiplatform)
+- **JSON parsing**: kotlinx.serialization (country codes)
+- **Min SDK**: 24 · **Target/Compile SDK**: 36 · **iOS**: 15+
 
 ## Getting started
 
 ### Prerequisites
 
-- [Android Studio](https://developer.android.com/studio) (latest stable)
-- JDK 11
-- An Android device or emulator running API 24+
+- JDK 17
+- Android SDK (for Android builds)
+- Xcode 15+ (for iOS builds)
+- An Android device or emulator running API 24+ (for Android)
 
 ### Build & run
 
 ```bash
-# Clone and open in Android Studio, or build from the command line:
+# Android debug APK
 ./gradlew assembleDebug
 
 # Install on a connected device/emulator
 ./gradlew installDebug
+
+# iOS simulator (requires Kotlin framework built first; CODE_SIGNING_ALLOWED=NO because
+# no development team is configured — simulator builds don't need signing. OS= disambiguates
+# duplicated simulators; check with `xcrun simctl list devices available`)
+./gradlew :app:linkDebugFrameworkIosSimulatorArm64
+xcodebuild -project iosApp/StartChat.xcodeproj -scheme StartChat \
+  -configuration Debug -destination 'platform=iOS Simulator,name=iPhone 15,OS=17.5' \
+  CODE_SIGNING_ALLOWED=NO build
+
+# iOS Share Extension (requires Kotlin framework built first)
+xcodebuild -project iosApp/StartChat.xcodeproj -scheme ShareExtension \
+  -configuration Debug -destination 'platform=iOS Simulator,name=iPhone 15,OS=17.5' \
+  CODE_SIGNING_ALLOWED=NO build
 ```
 
-### Release build
+### Release build (Android)
 
 ```bash
 ./gradlew assembleRelease
@@ -147,12 +178,14 @@ app/src/main/java/com/gyros/startchat/
 
 ## Testing
 
-- **Unit tests** (`app/src/test/`) — JUnit 4 + MockK. ViewModel tests use
+- **Unit tests** (`app/src/test/`) — JUnit 4 + MockK (JVM-only). ViewModel tests use
   `kotlinx-coroutines-test` with `StandardTestDispatcher` and `Dispatchers.setMain`. Shared mock
   helpers live in `StartChatMocks.kt`; JSON fixtures live in `app/src/test/assets/`.
 - **Instrumented/UI tests** (`app/src/androidTest/`) — Compose `createComposeRule()`. Screens are
-  tested in isolation by passing a `State` object directly (no ViewModel or Hilt required), plus
+  tested in isolation by passing a `State` object directly (no ViewModel or Koin required), plus
   Room DAO tests run against an in-memory database.
+- **iOS unit tests** (`app/src/iosTest/`) — `kotlin.test` framework with `FakeClock` and
+  `FakePendingSharedTextStore` test doubles. Run via `./gradlew :app:iosSimulatorArm64Test`.
 
 ```bash
 # Run all unit tests
@@ -169,14 +202,17 @@ app/src/main/java/com/gyros/startchat/
 
 # Lint
 ./gradlew lint
+
+# iOS unit tests
+./gradlew :app:iosSimulatorArm64Test
 ```
 
 ## Dependency injection
 
-All dependencies are scoped to `ViewModelComponent` and wired up in a single Hilt module,
-`StartChatModule` (plus `DatabaseModule` for Room). When adding new dependencies, add them there.
-`CountryCodesReader` receives the asset path `"country_codes.json"` as a manually-injected
-constructor argument.
+All dependencies are wired up in Koin modules: `AppModule` (use cases, repos, platform services),
+`DatabaseModule` (Android: Room builder + AndroidSQLiteDriver), and `IosModule` (iOS: Room builder +
+BundledSQLiteDriver + NSUserDefaultsSettings). When adding new dependencies, add them to the
+appropriate module. `commonMain` uses `koinViewModel()` and `koinInject<T>()`.
 
 ## License
 
