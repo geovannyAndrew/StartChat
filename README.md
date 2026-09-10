@@ -27,8 +27,14 @@ opens WhatsApp for you.
 
 
 ## Screens & Navigation
+### Android
 | <img width="1080" height="2424" alt="Screenshot_1787025339" src="https://github.com/user-attachments/assets/b87c4210-71fe-4262-a1c8-8cc72044346a" /> | <img width="1080" height="2424" alt="Screenshot_20260819_203643" src="https://github.com/user-attachments/assets/a9978d07-aaf9-443a-919a-203188522172" /> | <img width="1080" height="2424" alt="Screenshot_1787025377" src="https://github.com/user-attachments/assets/59f10aca-88e3-4395-90c9-2dea55cc9a6b" /> |
 |:---:|:---:|:---:|
+
+### iOS
+| <img width="1206" height="2622" alt="Simulator Screenshot - iPhone 17 - 2026-09-09 at 18 44 54" src="https://github.com/user-attachments/assets/621a049d-3f7d-44e0-82e8-9088712de1b8" /> | <img width="1206" height="2622" alt="Simulator Screenshot - iPhone 17 - 2026-09-09 at 18 45 15" src="https://github.com/user-attachments/assets/0fa09e7b-c278-4d3f-9748-8773884f0086" /> | <img width="1206" height="2622" alt="Simulator Screenshot - iPhone 17 - 2026-09-09 at 18 45 19" src="https://github.com/user-attachments/assets/48c61467-e4e4-4a3a-985a-5e133e15dcc2" /> | <img width="1206" height="2622" alt="Simulator Screenshot - iPhone 17 - 2026-09-09 at 18 45 27" src="https://github.com/user-attachments/assets/a17a28ec-808d-465b-bfdf-5edc2fa89239" /> |
+| --- | --- | --- | --- |
+
 The app uses a `ModalNavigationDrawer` with a `NavHost` exposing three destinations:
 
 | Route         | Screen               | Description                                              |
