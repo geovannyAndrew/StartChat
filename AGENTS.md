@@ -39,14 +39,17 @@ No CI, formatter, or typecheck config exists — `lint` is the only static check
 Kotlin Multiplatform with three source sets:
 
 - `commonMain/`: shared UI (Compose Multiplatform), ViewModels, domain use cases, repositories,
-  repository implementations, Room DAO/DB, Koin DI modules (`AppModule`, `DatabaseModule`).
-- `androidMain/`: Android platform impls (`UrlOpenerImpl`, `AppInfoImpl`, `ClipBoardManagerImpl`,
-  `CountryCodesReaderImpl`), `DatabaseModule` (Room builder + Android SQLite driver), Android-only
-  `StartChatApplication`, `MainActivity` (launcher + `ACTION_SEND` share target).
-- `iosMain/`: iOS platform impls (`UrlOpenerImpl`, `AppInfoImpl`, `ClipBoardManagerImpl`,
-  `CountryCodesReaderImpl`), `IosModule` (Room builder + `BundledSQLiteDriver`,
-  `NSUserDefaultsSettings`), `PendingSharedTextStore` (App Group UserDefaults for share extension
-  handoff).
+  repository implementations, Room DAO/DB, Koin DI modules (`AppModule`, `ViewModelModule`).
+- `androidMain/`: Android platform impls in `data/` (`UrlOpenerImpl`, `AppInfoImpl`,
+  `ClipBoardManagerImpl`, `CountryCodesReaderImpl`, `PendingSharedTextStore`, `SettingsImpl`),
+  `DatabaseModule` (Room builder + Android SQLite driver), Android-only `StartChatApplication`,
+  `MainActivity` (launcher + `ACTION_SEND` share target), `screens/startchat/StartChatScreenBridge`,
+  `screens/about/AboutIcon.android.kt`, `common/extensions/ContextExt.kt`.
+- `iosMain/`: iOS platform impls in `data/` (`UrlOpenerImpl`, `AppInfoImpl`, `ClipBoardManagerImpl`,
+  `CountryCodesReaderImpl`, `PendingSharedTextStore`), `IosModule` (Room builder +
+  `BundledSQLiteDriver`, `NSUserDefaultsSettings`), entry points `App.kt` (`@Composable
+  StartChatApp()`) and `MainViewController.kt` (`MainUIViewController`),
+  `screens/about/AboutIcon.ios.kt`.
 
 DI wiring per platform via Koin modules. `commonMain` uses `koinViewModel()` and `koinInject<T>()`.
 Platform services (`UrlOpener`, `AppInfo`, `ClipBoardManager`, `CountryCodesReader`, `Settings`)
@@ -92,7 +95,6 @@ button gets disabled).
 
 ## Other instruction files
 
-`CLAUDE.md` and `README.md` describe the same architecture in more detail, but `CLAUDE.md`
-predates the KMP migration — trust this file and `README.md` over it.
+`CLAUDE.md` and `README.md` describe the same architecture in more detail.
 `docs/kmp-migration-spec.md` records the full Phase 1–4 KMP migration history.
 `docs/shared-navigation-spec.md` records the shared-drawer/NavHost consolidation (Phase SN).

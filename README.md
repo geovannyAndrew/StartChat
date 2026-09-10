@@ -1,8 +1,9 @@
 # Start Chat
 
-Start a WhatsApp chat with any phone number without saving it as a contact. Enter a number
-manually, pick one up automatically from your clipboard, or share text into the app from anywhere
-on your device — Start Chat extracts the number and opens WhatsApp for you.
+Start a WhatsApp chat with any phone number without saving it as a contact. Available on
+**Android** and **iOS**. Enter a number manually, pick one up automatically from your clipboard,
+or share text into the app from anywhere on your device — Start Chat extracts the number and
+opens WhatsApp for you.
 
 ## Features
 
@@ -36,12 +37,17 @@ The app uses a `ModalNavigationDrawer` with a `NavHost` exposing three destinati
 | `history`     | `ChatHistoryScreen`  | List of previously started chats with timestamps         |
 | `about`       | `AboutScreen`        | App description and version info                         |
 
-`MainActivity` behaves differently depending on how it's launched:
+Entry points differ per platform:
 
-- **Launcher** (`ACTION_MAIN`) — renders `StartChatMainScreen` (drawer + nav host).
-- **Share target** (`ACTION_SEND`, `text/*`) — renders `StartChatScreenWithViewModel` directly as a
-  transparent overlay dialog, pre-filling the shared text. The activity finishes after WhatsApp is
-  launched.
+**Android** — `MainActivity` handles two modes based on the incoming Intent:
+
+- **Launcher** (`ACTION_MAIN`) — renders `StartChatMainScreen` (drawer + nav host with routes
+  `start_chat`/`history`/`about`).
+- **Share target** (`ACTION_SEND`, `text/*`) — renders `StartChatScreenForShare` as a transparent
+  overlay dialog, pre-filling the shared text. The activity finishes after WhatsApp is launched.
+
+**iOS** — `MainViewController` + `App` composable. The share extension writes to App Group
+UserDefaults (`PendingSharedTextStore`); the main app reads pending text on launch.
 
 ## Architecture
 
@@ -87,7 +93,8 @@ Each chat that's started is persisted to a Room database (`StartChatDatabase` /
 ### Launching WhatsApp
 
 `GetWhatsAppUriUseCase` builds a [`wa.me`](https://wa.me) deep link from the phone number
-(stripping the `+`), e.g. `https://wa.me/15551234567`, which is opened via an implicit `Intent`.
+(stripping the `+`), e.g. `https://wa.me/15551234567`, which is opened via the platform
+`UrlOpener` (Android `Intent`, iOS `UIApplication.openURL`).
 
 ## Project structure
 
@@ -95,35 +102,47 @@ Kotlin Multiplatform with three source sets:
 
 ```
 app/src/commonMain/kotlin/com/gyros/startchat/
+├── MainNavHost.kt                      # NavHost (multiplatform navigation-compose)
+├── StartChatMainScreen.kt             # Main screen with drawer + nav host
 ├── screens/
-│   ├── startchat/                  # StartChatScreen + StartChatViewModel + state
-│   ├── history/                    # ChatHistoryScreen + ChatHistoryViewModel
-│   └── about/                      # AboutScreen
-├── navigation/                     # MainNavHost (multiplatform navigation-compose)
-├── common/composables/              # Shared composables (e.g. DropdownCountries)
-├── common/extensions/               # Kotlin extensions (String)
-├── ui/theme/                        # Compose Material3 theme (Color, Theme, Type)
-├── domain/                          # Use cases (one class per use case)
-├── repositories/                    # Repository interfaces + implementations
+│   ├── startchat/                      # StartChatScreen, StartChatScreenWithViewModel,
+│   │                                    #   StartChatViewModel, StartChatState
+│   ├── history/                        # ChatHistoryScreen, ChatHistoryScreenWithViewModel,
+│   │                                    #   ChatHistoryViewModel
+│   └── about/                          # AboutScreen, AboutScreenWithViewModel, AboutIcon
+├── common/
+│   ├── composables/                    # Shared composables (e.g. DropdownCountries)
+│   └── extensions/                     # String extensions
+├── ui/theme/                           # Compose Material3 theme (Color, Theme, Type)
+├── domain/                             # Use cases (one class per use case)
+├── repositories/                       # Repository interfaces + implementations
 ├── data/
-│   ├── models/                      # CountryCode, ChatHistoryEntry (Room @Entity)
-│   ├── ChatHistoryDao.kt, StartChatDatabase.kt
+│   ├── models/                         # CountryCode, ChatHistoryEntry (Room @Entity)
+│   ├── ChatHistoryDao.kt, StartChatDatabase.kt, Settings interfaces
 │   └── (interfaces) ClipBoardManager, CountryCodesReader, UrlOpener, AppInfo
-└── di/                              # Koin modules (AppModule, DatabaseModule)
+└── di/                                 # AppModule, ViewModelModule
 
 app/src/androidMain/kotlin/com/gyros/startchat/
-├── MainActivity.kt                  # Entry point, handles launcher & share-target intents
-├── StartChatApplication.kt         # Koin application (startKoin)
-└── platform/                        # Android implementations:
-                                     #   UrlOpener (Intent), ClipBoardManager (ClipboardManager),
-                                     #   CountryCodesReader (assets), AppInfo (packageManager)
+├── MainActivity.kt                     # Entry point, handles launcher & share-target intents
+├── StartChatApplication.kt            # Koin application (startKoin)
+├── data/                               # Android platform impls:
+│                                      #   UrlOpenerImpl, AppInfoImpl, ClipBoardManagerImpl,
+│                                      #   CountryCodesReaderImpl, PendingSharedTextStore,
+│                                      #   SettingsImpl
+├── di/DatabaseModule.kt               # Room builder + AndroidSQLiteDriver
+├── screens/
+│   ├── startchat/StartChatScreenBridge.kt  # Share-target overlay composable
+│   └── about/AboutIcon.android.kt
+└── common/extensions/ContextExt.kt
 
 app/src/iosMain/kotlin/com/gyros/startchat/
-└── platform/                        # iOS implementations:
-                                      #   UrlOpener (UIApplication.openURL),
-                                      #   ClipBoardManager (UIPasteboard),
-                                      #   CountryCodesReader (bundle),
-                                      #   AppInfo (Info.plist)
+├── App.kt                             # @Composable StartChatApp()
+├── MainViewController.kt              # MainUIViewController (iOS entry)
+├── data/                              # iOS platform impls:
+│                                      #   UrlOpenerImpl, AppInfoImpl, ClipBoardManagerImpl,
+│                                      #   CountryCodesReaderImpl, PendingSharedTextStore
+├── di/IosModule.kt                    # Room builder + BundledSQLiteDriver + NSUserDefaults
+└── screens/about/AboutIcon.ios.kt
 ```
 
 ## Tech stack
